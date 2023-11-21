@@ -1,41 +1,51 @@
 <?php
+
 namespace App\Controller;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Component\BrowserKit\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Entity\User;
+use Symfony\Component\Routing\Annotation\Route;
+
+use App\Service\JsonConverter;
+use App\Service\ApiLinker;
 
 class ConnexionController extends AbstractController {
 
-    private $passwordHasher;
-    public  function __construct(UserPasswordHasherInterface $passwordHasher) {
-        $this->passwordHasher = $passwordHasher;
+    private $jsonConverter;
+    private $apiLinker;
+
+    public function __construct(ApiLinker $apiLinker, JsonConverter $jsonConverter) {
+        $this->apiLinker = $apiLinker;
+        $this->jsonConverter = $jsonConverter;
     }
 
-    #[Route('/api/login', methods: ['POST'])]
-    public function getToken(ManagerRegistry $doctrine, JWTTokenManagerInterface $JWTManager) {
-        $request = Request::createFromGlobals();
-        $data = json_decode($request->getContent(), true);
+    #[Route('/login', methods: ['POST'])]
+    public function connexion(Request $request) {
 
-        if (!is_array($data) || $data == null || empty($data['username']) || empty($data['password'])) {
-            return new Response('Identifiants invalides', 401);
+        $username = $request->request->get('username');
+        $password = $request->request->get('password');
+
+        if (!empty($username) && !empty($password)) {
+            $data = $this->jsonConverter->encodeToJson(['username' => $username, 'password' => $password]);
+            $response = $this->apiLinker->postData('/login', $data, null);
+            $responseObject = json_decode($response);
+
+            $session = $request->getSession();
+            $session->set('token-session', $responseObject->token);
+
+            return $this->redirect('/incidents');
         }
 
-        $entityManager = $doctrine->getManager();
-        $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $data['username']]);
+        return $this->redirect('/login');
+    }
 
-        if (!$user) {
-            throw $this->createNotFoundException();
-        }
-        if (!$this->passwordHasher->isPasswordValid($user, $data['password'])) {
-            return new Response('Identifiants invalides', 401);
-        }
+    #[Route('/logout', methods: ['GET'])]
+    public function deconnexion(Request $request) {
+        $session = $request->getSession();
+        $session->remove('token-session');
+        $session->clear();
 
-        $token = $JWTManager->create($user);
-        return new JsonResponse(['token' => $token]);
+        return $this->redirect('/');
     }
 }
