@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Service\JsonConverter;
 use App\Service\ApiLinker;
+use OpenApi\Attributes as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 class ConnexionController extends AbstractController {
 
@@ -21,25 +23,32 @@ class ConnexionController extends AbstractController {
     }
 
     #[Route('/login', methods: ['POST'])]
-    public function connexion(Request $request) {
-
+    public function connexion(Request $request): Response
+    {
         $username = $request->request->get('username');
         $password = $request->request->get('password');
-
-        if (!empty($username) && !empty($password)) {
-            $data = $this->jsonConverter->encodeToJson(['username' => $username, 'password' => $password]);
+        if (empty($username) || empty($password)) {
+            return new Response('Les champs username et password sont obligatoires.', Response::HTTP_BAD_REQUEST);
+        }
+    
+        $data = $this->jsonConverter->encodeToJson(['username' => $username, 'password' => $password]);
+    
+        try {
             $response = $this->apiLinker->postData('/login', $data, null);
             $responseObject = json_decode($response);
-
-            $session = $request->getSession();
-            $session->set('token-session', $responseObject->token);
-
-            return $this->redirect('/incidents');
+            if (!empty($responseObject->token)) {
+                $session = $request->getSession();
+                $session->set('token-session', $responseObject->token);
+    
+                return $this->redirectToRoute('peperon_route');
+            } else {
+                return new Response('Réponse API invalide.', Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        } catch (\Exception $e) {
+            return new Response('Erreur lors de la communication avec l\'API : ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return $this->redirect('/login');
     }
-
+    
     #[Route('/logout', methods: ['GET'])]
     public function deconnexion(Request $request) {
         $session = $request->getSession();

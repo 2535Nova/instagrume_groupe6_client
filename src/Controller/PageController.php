@@ -18,7 +18,7 @@ class PageController extends AbstractController {
 
     #[Route('/', methods: ['GET'])]
     public function displayConnexionPage() {
-        return $this->render('accueil.html.twig', []);
+        return $this->render('connexion.html.twig', []);
     }
 
     #[Route('/myself', methods: ['GET'], condition: "service('route_checker').checkUser(request)")]
