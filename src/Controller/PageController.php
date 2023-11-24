@@ -21,6 +21,11 @@ class PageController extends AbstractController {
         return $this->render('connexion.html.twig', []);
     }
 
+    #[Route('/inscription', methods: ['GET'])]
+    public function displayInscriptionPage() {
+        return $this->render('inscription.html.twig', []);
+    }
+
     #[Route('/myself', methods: ['GET'], condition: "service('route_checker').checkUser(request)")]
     public function displayUserInfoPage(Request $request) {
         $session = $request->getSession();

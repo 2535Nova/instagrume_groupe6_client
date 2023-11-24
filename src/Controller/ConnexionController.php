@@ -9,8 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Service\JsonConverter;
 use App\Service\ApiLinker;
-use OpenApi\Attributes as OA;
-use Nelmio\ApiDocBundle\Annotation\Model;
 
 class ConnexionController extends AbstractController {
 

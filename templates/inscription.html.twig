@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block titre %}{{ parent() }} - Connexion{% endblock%}
+{% block titre %}{{ parent() }} - Inscription{% endblock%}
 
 {% block stylesheets %}
 	{{ parent() }}
@@ -23,11 +23,16 @@
                     <div class='form-group mt-3'>
                         <input type='password' class='form-control' id='password' name='password' placeholder='Mot de passe' required>
                     </div>
+                    <div class='form-group mt-3'>
+                        <input type='password' class='form-control' id='password' name='password' placeholder='Confirmation Mot de passe' required>
+                    </div>
                     <button type='submit' class='btn btn-success mt-4 w-100'>Valider</button>
                     <br><br>
-                    <span>
-                        Pas de compte ? <a href="/inscription">Inscrivez-vous.</a>
-                    </span>
+                    <div class="d-flex justify-content-center text-center">
+                        <span>
+                            Vous avez un compte ? <a href="/">Connectez-vous.</a>
+                        </span> 
+                    </div>
                     <br>
                 </form>
             </div>
