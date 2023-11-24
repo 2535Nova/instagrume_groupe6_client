@@ -55,4 +55,28 @@ class ConnexionController extends AbstractController {
 
         return $this->redirect('/');
     }
+
+
+    #[Route('/inscription', methods: ['POST'])]
+    public function inscription(Request $request): Response
+    {
+        $username= $request->request->get('username');
+        $password= $request->request->get('password');
+        $confirm_password= $request->request->get("confirm_password");
+        if (empty($username) || empty($password) || empty($confirm_password)) {
+            return new Response('Les champs username, password et confirmation password sont obligatoires.', Response::HTTP_BAD_REQUEST);
+        }
+        if ($password === $confirm_password) {
+            try {
+                $data = $this->jsonConverter->encodeToJson(['username' => $username, 'password' => $password]);
+                $this->apiLinker->postData('/inscription', $data, null);
+                return $this->redirect("/");
+            } catch (\Exception $e) {
+                return new Response('Erreur lors de la communication avec l\'API : ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }else{
+            return new Response('Les champs password et confirmation password ne sont pas identique.', Response::HTTP_BAD_REQUEST);
+        }
+        
+    }
 }
