@@ -10,12 +10,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Service\JsonConverter;
 use App\Service\ApiLinker;
 
-class ConnexionController extends AbstractController {
+class ConnexionController extends AbstractController
+{
 
     private $jsonConverter;
     private $apiLinker;
 
-    public function __construct(ApiLinker $apiLinker, JsonConverter $jsonConverter) {
+    public function __construct(ApiLinker $apiLinker, JsonConverter $jsonConverter)
+    {
         $this->apiLinker = $apiLinker;
         $this->jsonConverter = $jsonConverter;
     }
@@ -28,16 +30,16 @@ class ConnexionController extends AbstractController {
         if (empty($username) || empty($password)) {
             return new Response('Les champs username et password sont obligatoires.', Response::HTTP_BAD_REQUEST);
         }
-    
+
         $data = $this->jsonConverter->encodeToJson(['username' => $username, 'password' => $password]);
-    
+
         try {
             $response = $this->apiLinker->postData('/login', $data, null);
             $responseObject = json_decode($response);
             if (!empty($responseObject->token)) {
                 $session = $request->getSession();
                 $session->set('token-session', $responseObject->token);
-    
+
                 return $this->redirectToRoute('peperon_route');
             } else {
                 return new Response('Réponse API invalide.', Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -46,9 +48,37 @@ class ConnexionController extends AbstractController {
             return new Response('Erreur lors de la communication avec l\'API : ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    #[Route('/search', methods: ['GET'])]
+    public function getuserbyusername(Request $request): Response
+    {
+        $username = $request->query->get('username');
+
+        if (empty($username)) {
+            return new Response('Le champ username est obligatoire.', Response::HTTP_BAD_REQUEST);
+        }
+
+        // Utilisation directe de json_encode pour l'encodage JSON
+        $data = json_encode(['username' => $username]);
+
+        try {
+            $response = $this->apiLinker->getData('/users/search', $data);
+
+            if ($response) {
+
+            } else {
+                // Return a successful response with the data from the API
+                return new Response($response->getContent(), $response->getStatusCode());
+            }
+        } catch (\Exception $e) {
+            return new Response('Erreur lors de la communication avec l\'API.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     #[Route('/logout', methods: ['GET'])]
-    public function deconnexion(Request $request) {
+    public function deconnexion(Request $request)
+    {
         $session = $request->getSession();
         $session->remove('token-session');
         $session->clear();
@@ -60,9 +90,9 @@ class ConnexionController extends AbstractController {
     #[Route('/inscription', methods: ['POST'])]
     public function inscription(Request $request): Response
     {
-        $username= $request->request->get('username');
-        $password= $request->request->get('password');
-        $confirm_password= $request->request->get("confirm_password");
+        $username = $request->request->get('username');
+        $password = $request->request->get('password');
+        $confirm_password = $request->request->get("confirm_password");
         if (empty($username) || empty($password) || empty($confirm_password)) {
             return new Response('Les champs username, password et confirmation password sont obligatoires.', Response::HTTP_BAD_REQUEST);
         }
@@ -74,9 +104,9 @@ class ConnexionController extends AbstractController {
             } catch (\Exception $e) {
                 return new Response('Erreur lors de la communication avec l\'API : ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-        }else{
+        } else {
             return new Response('Les champs password et confirmation password ne sont pas identique.', Response::HTTP_BAD_REQUEST);
         }
-        
+
     }
 }

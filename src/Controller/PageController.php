@@ -14,9 +14,14 @@ class PageController extends AbstractController {
   
     public function __construct(ApiLinker $apiLinker) {
         $this->apiLinker = $apiLinker;
-     }
+    }
 
-    #[Route('/', methods: ['GET'])]
+    #[Route("/", methods: ["GET"])]
+    public function displayAccueilPage(){
+        return $this->render("accueil.html.twig", []);
+    }
+
+    #[Route('/login', methods: ['GET'])]
     public function displayConnexionPage() {
         return $this->render('connexion.html.twig', []);
     }

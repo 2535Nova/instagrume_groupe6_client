@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}{{ parent() }} - Acceuil{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}  
+{% endblock %}
+
+{% block body %}
+    {% include 'navbar.html.twig' %}
+{% endblock %}
