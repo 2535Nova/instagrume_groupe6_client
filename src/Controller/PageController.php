@@ -57,7 +57,8 @@ class PageController extends AbstractController {
         if (empty($username)) {
             return new Response('Le champ username est obligatoire.', Response::HTTP_BAD_REQUEST);
         }
-        $token = $this->getAuthenticationToken($request);
+        $session = $request->getSession();
+        $token = $session->get('token-session');
         try {
             $response = $this->apiLinker->getData('/users/search?username=' . $username, $token);
     
@@ -70,11 +71,5 @@ class PageController extends AbstractController {
         } catch (\Exception $e) {
             return new Response('Erreur lors de la communication avec l\'API.:'.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private function getAuthenticationToken(Request $request): string
-    {
-        $session = $request->getSession();
-        return $session->get('token-session', '');
     }
 }
