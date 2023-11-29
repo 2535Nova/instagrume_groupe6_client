@@ -41,7 +41,7 @@ class ConnexionController extends AbstractController
         }
 
         $data = $this->jsonConverter->encodeToJson(['username' => $username, 'password' => $password]);
-
+/*
         try {
             $response = $this->apiLinker->postData('/login', $data, null);
             $responseObject = json_decode($response);
@@ -49,13 +49,24 @@ class ConnexionController extends AbstractController
                 $session = $request->getSession();
                 $session->set('token-session', $responseObject->token);
 
-                return $this->redirectToRoute('peperon_route');
+                return $this->redirectToRoute('/');
             } else {
                 return new Response('Réponse API invalide.', Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         } catch (\Exception $e) {
             return new Response('Erreur lors de la communication avec l\'API : ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        }*/
+
+            $response = $this->apiLinker->postData('/login', $data, null);
+            $responseObject = json_decode($response);
+            if (!empty($responseObject->token)) {
+                $session = $request->getSession();
+                $session->set('token-session', $responseObject->token);
+
+                return $this->redirect('/');
+            } else {
+                return new Response('Réponse API invalide.', Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
     }
 
     #[Route('/logout', methods: ['GET'])]

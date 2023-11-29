@@ -22,8 +22,10 @@ class PageController extends AbstractController {
     }
 
     #[Route("/", methods: ["GET"])]
-    public function displayAccueilPage(){
-        return $this->render("accueil.html.twig", []);
+    public function displayAccueilPage(Request $request){
+        $session = $request->getSession();
+        $token = $session->get('token-session');
+        return $this->render("accueil.html.twig", ["token"=>$token]);
     }
 
     #[Route('/myself', methods: ['GET'], condition: "service('route_checker').checkUser(request)")]
@@ -33,7 +35,7 @@ class PageController extends AbstractController {
         $jsonUser = $this->apiLinker->getData('/myself', $token);
         $user = json_decode($jsonUser);
 
-        return $this->render('selfuser.html.twig', ['user' => $user]);
+        return $this->render('accueil.html.twig', ['user' => $user]);
     }
 
     #[Route('/users', methods: ['GET'], condition: "service('route_checker').checkAdmin(request)")]
