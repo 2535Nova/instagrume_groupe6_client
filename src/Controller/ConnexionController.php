@@ -41,32 +41,19 @@ class ConnexionController extends AbstractController
         }
 
         $data = $this->jsonConverter->encodeToJson(['username' => $username, 'password' => $password]);
-/*
-        try {
-            $response = $this->apiLinker->postData('/login', $data, null);
-            $responseObject = json_decode($response);
-            if (!empty($responseObject->token)) {
-                $session = $request->getSession();
-                $session->set('token-session', $responseObject->token);
+        $response = $this->apiLinker->postData('/login', $data, null);
+        $responseObject = json_decode($response);
+        
+        $jsonUser = $this->apiLinker->getData('/myself', $responseObject->token);
+        $user = json_decode($jsonUser); 
+        if (!empty($responseObject->token) && $user->ban == false) {
+            $session = $request->getSession();
+            $session->set('token-session', $responseObject->token);
 
-                return $this->redirectToRoute('/');
-            } else {
-                return new Response('Réponse API invalide.', Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-        } catch (\Exception $e) {
-            return new Response('Erreur lors de la communication avec l\'API : ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }*/
-
-            $response = $this->apiLinker->postData('/login', $data, null);
-            $responseObject = json_decode($response);
-            if (!empty($responseObject->token)) {
-                $session = $request->getSession();
-                $session->set('token-session', $responseObject->token);
-
-                return $this->redirect('/');
-            } else {
-                return new Response('Réponse API invalide.', Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
+            return $this->redirect('/');
+        } else {
+            return new Response('Réponse API invalide.:'.var_dump($response), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     #[Route('/logout', methods: ['GET'])]

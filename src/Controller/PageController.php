@@ -33,9 +33,9 @@ class PageController extends AbstractController {
         $session = $request->getSession();
         $token = $session->get('token-session');
         $jsonUser = $this->apiLinker->getData('/myself', $token);
-        $user = json_decode($jsonUser);
+        $user = json_decode($jsonUser); 
 
-        return $this->render('accueil.html.twig', ['user' => $user]);
+        return $this->render('accueil.html.twig', ['user' => $user, "token" => $token]);
     }
 
     #[Route('/users', methods: ['GET'], condition: "service('route_checker').checkAdmin(request)")]
