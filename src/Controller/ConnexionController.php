@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-
 use App\Service\JsonConverter;
 use App\Service\ApiLinker;
 
@@ -20,6 +19,16 @@ class ConnexionController extends AbstractController
     {
         $this->apiLinker = $apiLinker;
         $this->jsonConverter = $jsonConverter;
+    }
+
+    #[Route('/login', methods: ['GET'])]
+    public function displayConnexionPage() {
+        return $this->render('connexion.html.twig', []);
+    }
+
+    #[Route('/inscription', methods: ['GET'])]
+    public function displayInscriptionPage() {
+        return $this->render('inscription.html.twig', []);
     }
 
     #[Route('/login', methods: ['POST'])]
@@ -48,33 +57,6 @@ class ConnexionController extends AbstractController
             return new Response('Erreur lors de la communication avec l\'API : ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-    #[Route('/search', methods: ['GET'])]
-    public function getuserbyusername(Request $request): Response
-    {
-        $username = $request->query->get('username');
-
-        if (empty($username)) {
-            return new Response('Le champ username est obligatoire.', Response::HTTP_BAD_REQUEST);
-        }
-
-        // Utilisation directe de json_encode pour l'encodage JSON
-        $data = json_encode(['username' => $username]);
-
-        try {
-            $response = $this->apiLinker->getData('/users/search', $data);
-
-            if ($response) {
-
-            } else {
-                // Return a successful response with the data from the API
-                return new Response($response->getContent(), $response->getStatusCode());
-            }
-        } catch (\Exception $e) {
-            return new Response('Erreur lors de la communication avec l\'API.', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
 
     #[Route('/logout', methods: ['GET'])]
     public function deconnexion(Request $request)
