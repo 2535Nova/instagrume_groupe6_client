@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+
 use App\Service\JsonConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,11 @@ class PageController extends AbstractController {
     public function displayAccueilPage(Request $request){
         $session = $request->getSession();
         $token = $session->get('token-session');
-        return $this->render("accueil.html.twig", ["token"=>$token]);
+
+        $jsonposts= $this->apiLinker->getData("/posts", $token);
+        $posts= json_decode($jsonposts);
+        shuffle($posts);
+        return $this->render("accueil.html.twig", ["token"=>$token, "posts"=>$posts]);
     }
 
     #[Route('/myself', methods: ['GET'], condition: "service('route_checker').checkUser(request)")]
@@ -46,7 +51,7 @@ class PageController extends AbstractController {
         $response = $this->apiLinker->getData('/user', $token);
         $users = json_decode($response);
 
-        return $this->render('users.html.twig', ['users' => $users, 'role' => 'admin']);
+        return $this->render('users.html.twig', ['users' => $users]);
     }
 
     #[Route('/search', methods: ['GET'])]

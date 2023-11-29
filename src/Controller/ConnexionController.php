@@ -44,9 +44,9 @@ class ConnexionController extends AbstractController
         $response = $this->apiLinker->postData('/login', $data, null);
         $responseObject = json_decode($response);
         
-        $jsonUser = $this->apiLinker->getData('/myself', $responseObject->token);
-        $user = json_decode($jsonUser); 
-        if (!empty($responseObject->token) && $user->ban == false) {
+        //$jsonUser = $this->apiLinker->getData('/myself', $responseObject->token);
+        //$user = json_decode($jsonUser); 
+        if (!empty($responseObject->token)) {
             $session = $request->getSession();
             $session->set('token-session', $responseObject->token);
 
