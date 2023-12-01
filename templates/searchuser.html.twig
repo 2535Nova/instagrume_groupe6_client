@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block titre %}{{ parent() }} - search{% endblock %}
+{% block titre %}{{ parent() }} - {{user.user_identifier}} Profile Page{% endblock %}
 
 {% block stylesheets %}
 	{{ parent() }}
