@@ -51,7 +51,7 @@ class PageController extends AbstractController {
         $response = $this->apiLinker->getData('/user', $token);
         $users = json_decode($response);
 
-        return $this->render('users.html.twig', ['users' => $users]);
+        return $this->render('accueil.html.twig', ['users' => $users]);
     }
 
     #[Route('/search', methods: ['GET'])]
@@ -66,9 +66,9 @@ class PageController extends AbstractController {
         $token = $session->get('token-session');
         try {
             $response = $this->apiLinker->getData('/users/search?username=' . $username, $token);
-    
             if ($response) {
-                return new Response($this->jsonConverter->encodeToJson($response));
+                $param= json_decode($response);
+                return $this->render("user.html.twig", ["user" => $param, "token" => $token]);
             } else {
                 return new JsonResponse(['error' => 'Le champ username est obligatoire.'], Response::HTTP_BAD_REQUEST);
 

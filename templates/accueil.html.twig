@@ -16,9 +16,9 @@
         {% for post in posts %}
             {% if post.islock == false %}
                 <article>
-                    {{ dump(post) }}
+                    <!--{{ dump(post) }}-->
                     <span>De: <a href="/search?username={{post.user.username}}">{{post.user.username}}</a></span>
-                    <img href="{{ post.image }}"></img>
+                    <img src="{{ post.image }}"></img>
                     <p>{{post.description}}</p>
                 </article>
             {% endif %}

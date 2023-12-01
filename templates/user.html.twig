@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}{{ parent() }} - search{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}  
+{% endblock %}
+
+{% block body %}
+    {% include 'navbar.html.twig' %}
+    <main>
+        <span>{{user.username}}</span>
+        <img src="{{user.avatar}}"></img>
+        <span>{{user.ban}}</span>
+    </main>
+{% endblock %}
