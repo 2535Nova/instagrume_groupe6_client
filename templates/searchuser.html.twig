@@ -13,8 +13,7 @@
 {% block body %}
     {% include 'navbar.html.twig' %}
     <main>
-        <span>{{user.username}}</span>
         <img src="{{user.avatar}}"></img>
-        <span>{{user.ban}}</span>
+        <span>{{user.username}}</span>
     </main>
 {% endblock %}
