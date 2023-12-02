@@ -13,8 +13,28 @@
 {% block body %}
     {% include 'navbar.html.twig' %}
     <main>
-        {{ dump(user) }}
-        <img src="{{user.avatar}}"></img>
-        <span>{{user.username}}</span>
+        <div>
+            {{ dump(user) }}
+            <img src="{{user.avatar}}"></img>
+            <span>{{user.username}}</span>
+        </div>
+        <br>
+        <div>
+            {% for post in user.posts %}
+                <article>
+                    <img src="{{post.image}}"></img>
+                    <span>{{post.description}}</span>
+                    <br><br>
+                    <div>
+                        Commentaires:<br>
+                        <br>
+                        {% for comment in post.commentaires %}
+                                De: {{comment.user_id.username}}<br>
+                                {{comment.content}}
+                        {% endfor %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
     </main>
 {% endblock %}
