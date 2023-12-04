@@ -15,15 +15,12 @@
 
 {% block javascripts %}
     {{ parent() }}  
-<<<<<<< HEAD
       <style>
     /* Cacher le bouton de fichier réel */
     input[type="file"] {
       display: none;
     }
   </style>
-=======
->>>>>>> 4cae3861ca6912ac60b0e4dd2fcc4bda8792d22f
 {% endblock %}
 
 {% block body %}
@@ -38,17 +35,11 @@
             {% if myself is defined %}
                 <span>
                     <button type="button" class="btn btn-primary"
-<<<<<<< HEAD
                         onclick="document.getElementById('fileInput').click();" 
                         style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                         Modifier
                     </button>
                     <input type="file" id="fileInput" style="display:none;" onchange="displayFileName(this)">
-=======
-                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                    Modifier
-                    </button>
->>>>>>> 4cae3861ca6912ac60b0e4dd2fcc4bda8792d22f
                 </span>
             {% endif %}
         </div>
