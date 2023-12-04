@@ -13,28 +13,28 @@
 {% block body %}
     {% include 'navbar.html.twig' %}
     <main>
-        <div class="container mt-5">
-            {{ dump(user) }}
-            <img class="img-fluid rounded-circle" src="{{user.avatar}}"></img>
+        <div class="container mt-4">
+            <!--{{ dump(user) }}-->
+             <div class="d-flex justify-content-center align-items-center rounded-circle overflow-hidden shadow-lg bg-light" style="width: 100px; height: 100px;">
+                <img class="img-fluid w-100 h-100 object-fit-cover" src="{{ user.avatar }}">
+            </div>
             <span>{{user.username}}</span>
         </div>
         <br>
-        <div>
-            {% for post in user.posts %}
-                <article>
-                    <img src="{{post.image}}"></img>
-                    <span>{{post.description}}</span>
-                    <br><br>
-                    <div>
-                        Commentaires:<br>
-                        <br>
-                        {% for comment in post.commentaires %}
-                                De: {{comment.user_id.username}}<br>
-                                {{comment.content}}
-                        {% endfor %}
-                    </div>
-                </article>
-            {% endfor %}
-        </div>
+        {% for post in user.posts %}
+            <article>
+                <img src="{{post.image}}"></img><br>
+                <span>{{post.description}}</span>
+                <br><br>
+            </article>
+            <div>
+                Commentaires:<br>
+                <br>
+                {% for comment in post.commentaires %}
+                    De: {{comment.user_id.username}}<br>
+                    {{comment.content}}
+                {% endfor %}
+            </div>
+        {% endfor %}
     </main>
 {% endblock %}
