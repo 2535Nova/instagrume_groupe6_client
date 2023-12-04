@@ -1,6 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block titre %}{{ parent() }} - {{user.user_identifier}} Profile Page{% endblock %}
+{% block titre %}
+    {{ parent() }} - 
+    {% if myself is defined %}
+        {{ myself }}
+    {% else %}
+        {{user.user_identifier}} Profile Page
+    {% endif %}
+{% endblock %}
 
 {% block stylesheets %}
 	{{ parent() }}

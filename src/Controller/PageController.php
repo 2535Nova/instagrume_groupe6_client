@@ -37,10 +37,12 @@ class PageController extends AbstractController {
     public function displayUserInfoPage(Request $request) {
         $session = $request->getSession();
         $token = $session->get('token-session');
-        $jsonUser = $this->apiLinker->getData('/myself', $token);
-        $user = json_decode($jsonUser); 
+        $self = $this->apiLinker->getData('/myself', $token);
+        $selfuser = json_decode($self); 
+        $jsonuser= $this->apiLinker->getData("/users/search?username=".$selfuser->username, $token);
+        $user= json_decode($jsonuser);
 
-        return $this->render('accueil.html.twig', ['user' => $user, "token" => $token]);
+        return $this->render('searchuser.html.twig', ['user' => $user, "token" => $token, "myself"=>"My Profile"]);
     }
 
     #[Route('/users', methods: ['GET'], condition: "service('route_checker').checkAdmin(request)")]
