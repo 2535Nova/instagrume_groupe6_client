@@ -26,6 +26,14 @@
                 <img class="img-fluid w-100 h-100 object-fit-cover" src="{{ user.avatar }}">
             </div>
             <span>{{user.username}}</span>
+            {% if myself is defined %}
+                <span>
+                    <button type="button" class="btn btn-primary"
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                    Modifier
+                    </button>
+                </span>
+            {% endif %}
         </div>
         <br>
         {% for post in user.posts %}
