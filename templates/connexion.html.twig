@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}{{ parent() }} - Connexion{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}  
+{% endblock %}
+
+{% block body %}
+    <div class="container-form-connexion">
+        <div class="container-md">   
+            <div class="row">
+                <form method='POST' action='/login' class="col-lg-3 col-12 mx-auto form-connexion p-5 pt-4 mb-4">
+                    <!--<img src='{{ asset("images/logo.svg") }}' class='w-50 mx-auto d-block'>-->
+
+                    <div class='form-group'>
+                        <input type='text' class='form-control' id='identifiant' name='username' placeholder='Identifiant' required>
+                    </div>
+                    <div class='form-group mt-3'>
+                        <input type='password' class='form-control' id='password' name='password' placeholder='Mot de passe' required>
+                    </div>
+                    <button type='submit' class='btn btn-success mt-4 w-100'>Se Connecter</button>
+                    <br><br>
+                    <span>
+                        Pas de compte ? <a href="/inscription">Inscrivez-vous.</a>
+                    </span>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

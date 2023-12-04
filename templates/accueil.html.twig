@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}{{ parent() }} - Accueil{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}  
+{% endblock %}
+
+{% block body %}
+    {% include 'navbar.html.twig' %}
+    <main>
+        {% for post in posts %}
+            {% if post.islock == false %}
+                <article>
+                    <!--{{ dump(post) }}-->
+                    <span>De: <a href="/search?username={{post.user.username}}">{{post.user.username}}</a></span>
+                    <img src="{{ post.image }}"></img>
+                    <p>{{post.description}}</p>
+                </article>
+            {% endif %}
+        {% endfor %}
+    </main>
+{% endblock %}
