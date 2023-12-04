@@ -15,12 +15,11 @@
 
 {% block javascripts %}
     {{ parent() }}  
-      <style>
-    /* Cacher le bouton de fichier réel */
-    input[type="file"] {
-      display: none;
-    }
-  </style>
+    <style>
+        input[type="file"] {
+        display: none;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
