@@ -27,20 +27,34 @@
     <main>
         <div class="container mt-4">
             <!--{{ dump(user) }}-->
-             <div class="d-flex justify-content-center align-items-center rounded-circle overflow-hidden shadow-lg bg-light" style="width: 100px; height: 100px;">
+            <div class="d-flex justify-content-center align-items-center rounded-circle overflow-hidden shadow-lg bg-light" style="width: 100px; height: 100px;">
                 <img class="img-fluid w-100 h-100 object-fit-cover" src="{{ user.avatar }}">
-            </div>
+            </div>    
             <span class= "row ps-2">
                 {{user.username}}
                 {% if myself is defined %}
                     <form class="col" methode="POST" enctype="multipart/form-data">
                         <button type="submit" class="btn btn-primary"
-                            onclick="document.getElementById('fileInput').click();" 
+                            onclick="document.getElementById('fileInput').click();"
                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                             Modifier
                         </button>
                         <input type="file" id="fileInput" style="display:none;" onchange="displayFileName(this)" accept=".png, .jpg, .jpeg">
                     </form>
+                {% elseif acctualuser is defined and "ROLE_ADMIN" in acctualuser.roles and "ROLE_ADMIN" not in user.roles %}
+                    <span class="col">
+                        {% if user.ban == false %}
+                            <button type="button" class="btn btn-danger"
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                Bannir
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-danger"
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                Debannir
+                            </button>
+                        {% endif %}
+                    </span>
                 {% endif %}
             </span>
         </div>

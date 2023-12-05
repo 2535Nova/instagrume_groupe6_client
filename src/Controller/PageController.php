@@ -72,11 +72,13 @@ class PageController extends AbstractController {
         }
         $session = $request->getSession();
         $token = $session->get('token-session');
+        $self= $this->apiLinker->getData('/myself', $token);
+        $selfuser= json_decode($self); 
         try {
             $response = $this->apiLinker->getData('/users/search?username=' . $username, $token);
             if ($response) {
                 $param= json_decode($response);
-                return $this->render("searchuser.html.twig", ["user" => $param, "token" => $token]);
+                return $this->render("searchuser.html.twig", ["user" => $param, "token" => $token, "acctualuser"=> $selfuser]);
             } else {
                 return new JsonResponse(['error' => 'Le champ username est obligatoire.'], Response::HTTP_BAD_REQUEST);
 
