@@ -90,4 +90,15 @@ class PageController extends AbstractController {
             return new Response('Erreur lors de la communication avec l\'API.:'.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    #[Route('/deletepost', methods: ['DELETE'])]
+    public function deletePost(Request $request){
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        $data= file_get_contents("php://input");
+        $json= json_decode($data);
+
+        $response= $this->apiLinker->deleteData("/posts/".$json->id, $token);
+        return new Response($response);
+    }
 }

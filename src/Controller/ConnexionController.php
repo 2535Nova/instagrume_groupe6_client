@@ -9,9 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Service\JsonConverter;
 use App\Service\ApiLinker;
 
-class ConnexionController extends AbstractController
-{
-
+class ConnexionController extends AbstractController{
     private $jsonConverter;
     private $apiLinker;
 
