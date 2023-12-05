@@ -18,7 +18,16 @@
                 {% if post.islock == false %}
                     <article>
                         <!--{{ dump(post) }}-->
-                        <span>De: <a href="/search?username={{ post.user.username }}">{{ post.user.username }}</a></span>
+                        <span>
+                            De: <a href="/search?username={{ post.user.username }}">{{ post.user.username }}</a>
+                            {% if selfuser is defined  and selfuser != null %}
+                                {% if "ROLE_ADMIN" in selfuser.roles or selfuser.username == post.user.user_identifier %}
+                                    <button type="button" class="btn btn-sm btn-danger"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                    Supprimer</button>
+                                {% endif %}
+                            {% endif %}
+                        </span>
                         <img src="{{ post.image }}"></img>
                         <p>{{ post.description }}</p>
                     </article>

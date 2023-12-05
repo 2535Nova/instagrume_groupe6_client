@@ -30,7 +30,13 @@ class PageController extends AbstractController {
         $jsonposts= $this->apiLinker->getData("/posts", $token);
         $posts= json_decode($jsonposts);
         shuffle($posts);
-        return $this->render("accueil.html.twig", ["token"=>$token, "posts"=>$posts]);
+        $self= null;
+        if ($token != null) {
+            $jsoninfos= $this->apiLinker->getData("/myself", $token);
+            $self= json_decode($jsoninfos);
+        }    
+
+        return $this->render("accueil.html.twig", ["token"=>$token, "posts"=>$posts, "selfuser"=>$self]);
     }
 
     #[Route('/myself', methods: ['GET'], condition: "service('route_checker').checkUser(request)")]
