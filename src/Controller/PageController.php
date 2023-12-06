@@ -72,13 +72,17 @@ class PageController extends AbstractController {
         }
         $session = $request->getSession();
         $token = $session->get('token-session');
-        $self= $this->apiLinker->getData('/myself', $token);
+        $self= null;
+        if (!empty($token)) {
+            $self= $this->apiLinker->getData('/myself', $token); 
+        }
         $selfuser= json_decode($self); 
+        
         try {
             $response = $this->apiLinker->getData('/users/search?username=' . $username, $token);
             if ($response) {
                 $param= json_decode($response);
-                if ($param->username === $selfuser->username) { 
+                if ($selfuser && $param->username === $selfuser->username) { 
                     return $this->redirect('/myself');
                 }
                 return $this->render("searchuser.html.twig", ["user" => $param, "token" => $token, "acctualuser"=> $selfuser]);
