@@ -72,20 +72,22 @@
             </span>
         </div>
         <br>
-        {% for post in user.posts %}
-            <article>
-                <img src="{{post.image}}"></img><br>
-                <span>{{post.description}}</span>
-                <br><br>
-            </article>
-            <div>
-                Commentaires:<br>
-                <br>
-                {% for comment in post.commentaires %}
-                    De: {{comment.user_id.username}}<br>
-                    {{comment.content}}
-                {% endfor %}
-            </div>
-        {% endfor %}
+        <div class="container">
+            {% for post in user.posts %}
+                <article>
+                    <img src="{{post.image}}"></img><br>
+                    <span>{{post.description}}</span>
+                    <br><br>
+                </article>
+                <div>
+                    Commentaires:<br>
+                    <br>
+                    {% for comment in post.commentaires %}
+                        De: {{comment.user_id.username}}<br>
+                        {{comment.content}}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
     </main>
 {% endblock %}
