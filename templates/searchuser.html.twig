@@ -83,8 +83,15 @@
                     Commentaires:<br>
                     <br>
                     {% for comment in post.commentaires %}
-                        De: {{comment.user_id.username}}<br>
-                        {{comment.content}}
+                        {#{ dump(comment) }#}
+                        De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a><br>
+                        {{comment.content}}<br>
+                        <div class="container">
+                            {% for reponse in comment.reponses %}
+                                De: <a href="/search?username={{ reponse.user.username }}">{{ reponse.user.username }}</a><br>
+                                {{reponse.content}}<br>
+                            {% endfor %}
+                        </div>
                     {% endfor %}
                 </div>
             {% endfor %}
