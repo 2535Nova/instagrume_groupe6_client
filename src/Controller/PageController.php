@@ -47,7 +47,7 @@ class PageController extends AbstractController {
         $selfuser = json_decode($self); 
         $jsonuser= $this->apiLinker->getData("/users/search?username=".$selfuser->username, $token);
         $user= json_decode($jsonuser);
-
+        
         return $this->render('searchuser.html.twig', ['user' => $user, "token" => $token, "myself"=>"My Profile"]);
     }
 
@@ -78,7 +78,7 @@ class PageController extends AbstractController {
             $response = $this->apiLinker->getData('/users/search?username=' . $username, $token);
             if ($response) {
                 $param= json_decode($response);
-                if ($param->username === $selfuser->username) {
+                if ($param->username === $selfuser->username) { 
                     return $this->redirect('/myself');
                 }
                 return $this->render("searchuser.html.twig", ["user" => $param, "token" => $token, "acctualuser"=> $selfuser]);
@@ -99,6 +99,28 @@ class PageController extends AbstractController {
         $json= json_decode($data);
 
         $response= $this->apiLinker->deleteData("/posts/".$json->id, $token);
+        return new Response($response);
+    }
+
+    #[Route('/ban', methods: ['PUT'])]
+    public function BanUser(Request $request){
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        $data= file_get_contents("php://input");
+        $json= json_decode($data);
+
+        $response= $this->apiLinker->putData("/users/".$json->id, $json, $token);
+        return new Response($response);
+    }
+
+    #[Route('/unban', methods: ['PUT'])]
+    public function UnBanUser(Request $request){
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        $data= file_get_contents("php://input");
+        $json= json_decode($data);
+
+        $response= $this->apiLinker->putData("/users/".$json->id, $json, $token);
         return new Response($response);
     }
 }

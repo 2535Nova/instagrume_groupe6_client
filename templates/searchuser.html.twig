@@ -26,7 +26,6 @@
     {% include 'navbar.html.twig' %}
     <main>
         <div class="container mt-4">
-            <!--{{ dump(user) }}-->
             <div class="d-flex justify-content-center align-items-center rounded-circle overflow-hidden shadow-lg bg-light" style="width: 100px; height: 100px;">
                 <img class="img-fluid w-100 h-100 object-fit-cover" 
                 {% if user.avatar == null %}
@@ -47,15 +46,23 @@
                         </button>
                         <input type="file" id="fileInput" style="display:none;" onchange="displayFileName(this)" accept=".png, .jpg, .jpeg">
                     </form>
-                {% elseif acctualuser is defined and "ROLE_ADMIN" in acctualuser.roles and "ROLE_ADMIN" not in user.roles %}
+                {% elseif acctualuser is defined and "ROLE_ADMIN" in acctualuser.roles and "ROLE_ADMIN" not in user.roles %} 
                     <span class="col">
                         {% if user.ban == false %}
-                            <button type="button" class="btn btn-danger"
+                            <button type="button" class="btn btn-danger ban-put-btn"
+                               data-post-id="{{ user.id }}"
+                                data-post-username="{{ user.username }}"
+                                data-post-password="{{ user.password }}"
+                                data-post-avatar="{{ user.avatar }}"
                                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                 Bannir
                             </button>
                         {% else %}
-                            <button type="button" class="btn btn-danger"
+                            <button type="button" class="btn btn-danger unban-put-btn"
+                                data-post-id="{{ user.id }}"
+                                data-post-username="{{ user.username }}"
+                                data-post-password="{{ user.password }}"
+                                data-post-avatar="{{ user.avatar }}"
                                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                 Debannir
                             </button>
