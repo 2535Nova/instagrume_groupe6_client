@@ -40,7 +40,7 @@ $(document).ready(function () {
         let obj= new Object();
         obj.id= userid;
         obj.username= username;
-        odj.password= password;
+        obj.password= password;
         obj.avatar= avatar;
         obj.ban= true;
 
@@ -75,7 +75,7 @@ $(document).ready(function () {
         let obj= new Object();
         obj.id= userid;
         obj.username= username;
-        odj.password= password;
+        obj.password= password;
         obj.avatar= avatar;
         obj.ban= false;
 

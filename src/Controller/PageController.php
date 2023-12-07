@@ -65,8 +65,8 @@ class PageController extends AbstractController {
     #[Route('/search', methods: ['GET'])]
     public function getuserbyusername(Request $request): Response
     {
-        $username = $request->query->get('username');
-
+        $username= htmlspecialchars($request->query->get('username'), ENT_QUOTES);
+        
         if (empty($username)) {
             return new Response('Le champ username est obligatoire.', Response::HTTP_BAD_REQUEST);
         }
