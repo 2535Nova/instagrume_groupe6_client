@@ -22,7 +22,12 @@
                             De: <a href="/search?username={{ post.user.username }}">{{ post.user.username }}</a>
                             {% if selfuser is defined and selfuser != null %}
                                 {% if "ROLE_ADMIN" in selfuser.roles or selfuser.username == post.user.user_identifier %}
-                                    <button type="button" class="btn btn-sm btn-danger ms-2 delete-post-btn"
+                                    <button type="submit" class="btn btn-primary ms-1"
+                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                        Modifier
+                                    </button>
+
+                                    <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
                                     data-post-id="{{ post.id }}"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Supprimer</button>
@@ -31,6 +36,8 @@
                         </span>
                         <img src="{{ post.image }}"></img>
                         <p>{{ post.description }}</p>
+                        
+                        <br>
                     </article>
                 {% endif %}
             {% endfor %}

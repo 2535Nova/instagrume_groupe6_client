@@ -52,7 +52,7 @@ class ConnexionController extends AbstractController{
             $session->set('token-session', $responseObject->token);
 
             return $this->redirect('/');
-        } else {
+        } else {            
             return new Response('Réponse API invalide.:'.var_dump($response), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

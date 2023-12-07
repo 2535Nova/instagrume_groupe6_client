@@ -76,18 +76,58 @@
             {% for post in user.posts %}
                 <article>
                     <img src="{{post.image}}"></img><br>
-                    <span>{{post.description}}</span>
+                    <span>{{post.description}}</span><br>
+                    <span>
+                        {% if myself is defined or (acctualuser is defined and acctualuser != null) %}
+                            {% if myself is defined or "ROLE_ADMIN" in acctualuser.roles or acctualuser.username == user.user_identifier %}
+                                <button type="submit" class="btn btn-primary"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                    Modifier
+                                </button>
+                                
+                                <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
+                                data-post-id="{{ post.id }}"
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                Supprimer</button>
+                            {% endif %}
+                        {% endif %}
+                    </span>
                     <br><br>
                 </article>
                 <div>
                     Commentaires:<br>
                     <br>
                     {% for comment in post.commentaires %}
-                        De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a><br>
-                        {{comment.content}}<br>
+                        De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
+                        {% if comment is defined and comment.user_id.username == acctualuser.username %}
+                            <button type="submit" class="btn btn-primary ms-1"
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                Modifier
+                            </button>
+
+                            <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
+                                data-post-id="{#{ id }#}"
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                Supprimer
+                            </button>
+                        {% endif %}
+                        <br>
+                        {{comment.content}}
                         <div class="container">
                             {% for reponse in comment.reponses %}
-                                De: <a href="/search?username={{ reponse.user.username }}">{{ reponse.user.username }}</a><br>
+                                De: <a href="/search?username={{ reponse.user.username }}">{{ reponse.user.username }}</a>
+                                {% if acctualuser is defined and reponse.user.username == acctualuser.username %}
+                                    <button type="submit" class="btn btn-primary ms-1"
+                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                        Modifier
+                                    </button>
+
+                                    <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
+                                    data-post-id="{#{ id }#}"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                    Supprimer</button>
+                                {% endif %}
+                                <br>
                                 {{reponse.content}}<br>
                             {% endfor %}
                         </div>
