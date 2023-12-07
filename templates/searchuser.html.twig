@@ -46,7 +46,7 @@
                         </button>
                         <input type="file" id="fileInput" style="display:none;" onchange="displayFileName(this)" accept=".png, .jpg, .jpeg">
                     </form>
-                {% elseif acctualuser != null and "ROLE_ADMIN" in acctualuser.roles and "ROLE_ADMIN" not in user.roles %} 
+                {% elseif (acctualuser != null and "ROLE_ADMIN" in acctualuser.roles) and "ROLE_ADMIN" not in user.roles %} 
                     <span class="col">
                         {% if user.ban == false %}
                             <button type="button" class="btn btn-danger ban-put-btn"
@@ -78,8 +78,8 @@
                     <img src="{{post.image}}"></img><br>
                     <span>{{post.description}}</span><br>
                     <span>
-                        {% if myself is defined or (acctualuser is defined and acctualuser != null) %}
-                            {% if myself is defined or "ROLE_ADMIN" in acctualuser.roles or acctualuser.username == user.user_identifier %}
+                        {% if (myself is defined and acctualuser is defined) or (acctualuser is defined and acctualuser != null) %}
+                            {% if "ROLE_ADMIN" in acctualuser.roles or acctualuser.username == user.user_identifier %}
                                 <button type="submit" class="btn btn-primary"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
@@ -99,33 +99,37 @@
                     <br>
                     {% for comment in post.commentaires %}
                         De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
-                        {% if comment is defined and comment.user_id.username == acctualuser.username %}
-                            <button type="submit" class="btn btn-primary ms-1"
-                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                                Modifier
-                            </button>
+                        {% if acctualuser is defined and acctualuser != null %}
+                            {% if "ROLE_ADMIN" in acctualuser.roles or acctualuser.username == comment.user_id.user_identifier %}
+                                <button type="submit" class="btn btn-primary ms-1"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                    Modifier
+                                </button>
 
-                            <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
-                                data-post-id="{#{ id }#}"
-                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                                Supprimer
-                            </button>
+                                <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
+                                    data-post-id="{#{ id }#}"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                    Supprimer
+                                </button>
+                            {% endif %}
                         {% endif %}
                         <br>
                         {{comment.content}}
                         <div class="container">
                             {% for reponse in comment.reponses %}
                                 De: <a href="/search?username={{ reponse.user.username }}">{{ reponse.user.username }}</a>
-                                {% if acctualuser is defined and reponse.user.username == acctualuser.username %}
-                                    <button type="submit" class="btn btn-primary ms-1"
-                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                                        Modifier
-                                    </button>
+                                {% if (myself is defined and acctualuser is defined) or (acctualuser is defined and acctualuser != null) %}
+                                    {% if "ROLE_ADMIN" in acctualuser.roles or acctualuser.username == reponse.user.user_identifier %}  
+                                        <button type="submit" class="btn btn-primary ms-1"
+                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                            Modifier
+                                        </button>
 
-                                    <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
-                                    data-post-id="{#{ id }#}"
-                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                                    Supprimer</button>
+                                        <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
+                                        data-post-id="{#{ id }#}"
+                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                        Supprimer</button>
+                                    {% endif %}
                                 {% endif %}
                                 <br>
                                 {{reponse.content}}<br>
