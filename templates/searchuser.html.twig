@@ -78,8 +78,8 @@
                     <img src="{{post.image}}"></img><br>
                     <span>{{post.description}}</span><br>
                     <span>
-                        {% if (myself is defined and acctualuser is defined) or (acctualuser is defined and acctualuser != null) %}
-                            {% if "ROLE_ADMIN" in acctualuser.roles or acctualuser.username == user.user_identifier %}
+                        {% if myself is defined %}
+                            {% if "ROLE_ADMIN" in user.roles or user.id == post.user %}
                                 <button type="submit" class="btn btn-primary"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
@@ -99,8 +99,8 @@
                     <br>
                     {% for comment in post.commentaires %}
                         De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
-                        {% if acctualuser is defined and acctualuser != null %}
-                            {% if "ROLE_ADMIN" in acctualuser.roles or acctualuser.username == comment.user_id.user_identifier %}
+                        {% if myself is defined or acctualuser is defined %}
+                            {% if acctualuser is defined and (acctualuser.username == comment.user_id.username or "ROLE_ADMIN" in acctualuser.roles) or "ROLE_ADMIN" in user.roles %}  
                                 <button type="submit" class="btn btn-primary ms-1"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
@@ -118,8 +118,8 @@
                         <div class="container">
                             {% for reponse in comment.reponses %}
                                 De: <a href="/search?username={{ reponse.user.username }}">{{ reponse.user.username }}</a>
-                                {% if (myself is defined and acctualuser is defined) or (acctualuser is defined and acctualuser != null) %}
-                                    {% if "ROLE_ADMIN" in acctualuser.roles or acctualuser.username == reponse.user.user_identifier %}  
+                                {% if myself is defined or (acctualuser is defined and acctualuser != null) %}
+                                    {% if acctualuser is defined and (acctualuser.username == reponse.user.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}
                                         <button type="submit" class="btn btn-primary ms-1"
                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                             Modifier
