@@ -78,7 +78,8 @@ class PageController extends AbstractController {
         }
         $selfuser= json_decode($self); 
 
-        $response = $this->apiLinker->getData('/users/search?username=' . $username, $token);
+        try {
+            $response = $this->apiLinker->getData('/users/search?username=' . $username, $token);
             if ($response) {
                 $param= json_decode($response);
                 if ($selfuser && $param->username === $selfuser->username) { 
@@ -89,10 +90,6 @@ class PageController extends AbstractController {
                 return new JsonResponse([ 'error' => 'Le champ username est obligatoire.'], Response::HTTP_BAD_REQUEST);
 
             }
-
-
-        try {
-            
         } catch (\Exception $e) {
             return new Response('Erreur lors de la communication avec l\'API.:'.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
