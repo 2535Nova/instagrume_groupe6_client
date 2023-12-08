@@ -100,7 +100,7 @@
                     {% for comment in post.commentaires %}
                         De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
                         {% if myself is defined or acctualuser is defined %}
-                            {% if acctualuser is defined and (acctualuser.username == comment.user_id.username or "ROLE_ADMIN" in acctualuser.roles) or "ROLE_ADMIN" in user.roles %}  
+                            {% if acctualuser is defined and acctualuser != null and (acctualuser.username == comment.user_id.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}  
                                 <button type="submit" class="btn btn-primary ms-1"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
