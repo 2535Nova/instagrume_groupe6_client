@@ -106,8 +106,8 @@
                                     Modifier
                                 </button>
 
-                                <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
-                                    data-post-id="{#{ id }#}"
+                                <button type="button" class="btn btn-sm btn-danger ms-1 delete-comment-btn"
+                                    data-comment-id="{{ comment.id }}"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Supprimer
                                 </button>
@@ -119,14 +119,14 @@
                             {% for reponse in comment.reponses %}
                                 De: <a href="/search?username={{ reponse.user.username }}">{{ reponse.user.username }}</a>
                                 {% if myself is defined or (acctualuser is defined and acctualuser != null) %}
-                                    {% if acctualuser is defined and (acctualuser.username == reponse.user.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}
+                                    {% if acctualuser is defined and acctualuser != null and (acctualuser.username == reponse.user.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}
                                         <button type="submit" class="btn btn-primary ms-1"
                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                             Modifier
                                         </button>
 
-                                        <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
-                                        data-post-id="{#{ id }#}"
+                                        <button type="button" class="btn btn-sm btn-danger ms-1 delete-reponse-btn"
+                                        data-reponse-id="{{ reponse.id }}"
                                         style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                         Supprimer</button>
                                     {% endif %}

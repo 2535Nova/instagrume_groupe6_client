@@ -95,4 +95,59 @@ $(document).ready(function () {
             }
         };
     });
+
+    $('.delete-comment-btn').on('click', function () {
+        var CommentId= $(this).data('comment-id');
+        var confirmDelete= confirm("Are you sure you want to delete this Commentaire?");
+        if (!confirmDelete) {
+            return;
+        }
+
+        let obj= new Object();
+        obj.id= CommentId;
+
+        var ajaxRequest= new XMLHttpRequest();
+        ajaxRequest.open('DELETE', '/deletecomment');
+        ajaxRequest.send(JSON.stringify(obj));
+
+        ajaxRequest.onreadystatechange = function() {
+            if(ajaxRequest.readyState === 4) {
+                if(ajaxRequest.status === 200) {
+                    console.log(ajaxRequest.responseText);
+                    location.reload();
+                }
+                else {
+                    console.log("Status error: " + ajaxRequest.status);
+                }
+            }
+        };
+    });
+
+    $('.delete-reponse-btn').on('click', function () {
+        var ReponseId= $(this).data('reponse-id');
+        var confirmDelete= confirm("Are you sure you want to delete this Reponse of Commentaire?");
+        if (!confirmDelete) {
+            return;
+        }
+
+        let obj= new Object();
+        obj.id= ReponseId;
+
+        var ajaxRequest= new XMLHttpRequest();
+        ajaxRequest.open('DELETE', '/deletereponse');
+        ajaxRequest.send(JSON.stringify(obj));
+
+        ajaxRequest.onreadystatechange = function() {
+            if(ajaxRequest.readyState === 4) {
+                if(ajaxRequest.status === 200) {
+                    console.log(ajaxRequest.responseText);
+                    location.reload();
+                }
+                else {
+                    console.log("Status error: " + ajaxRequest.status);
+                }
+            }
+        };
+    });
+
 });

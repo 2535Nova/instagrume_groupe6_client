@@ -106,6 +106,28 @@ class PageController extends AbstractController {
         return new Response($response);
     }
 
+    #[Route('/deletecomment', methods: ['DELETE'])]
+    public function deleteComment(Request $request){
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        $data= file_get_contents("php://input");
+        $json= json_decode($data);
+
+        $response= $this->apiLinker->deleteData("/commentaire/".$json->id, $token);
+        return new Response($response);
+    }
+
+    #[Route('/deletereponse', methods: ['DELETE'])]
+    public function deleteReponse(Request $request){
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        $data= file_get_contents("php://input");
+        $json= json_decode($data);
+
+        $response= $this->apiLinker->deleteData("/reponse/".$json->id, $token);
+        return new Response($response);
+    }
+
     #[Route('/ban', methods: ['PUT'])]
     public function BanUser(Request $request){
         $session= $request->getSession();
