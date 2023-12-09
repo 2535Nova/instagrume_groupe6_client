@@ -95,10 +95,21 @@
                     <br><br>
                 </article>
                 <div>
-                    Commentaires:<br>
+                    Commentaires ({{post.commentaires|length}}):<br>     
+                    {% if myself is defined or (acctualuser is defined and acctualuser != null) %}              
+                        <form class="d-flex" action='/createcomment' method="POST">
+                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                            <input class="form-control w-auto" name="commentaire" type="text" placeholder="Believe comment">
+                            <button class="btn btn-outline-success ms-2" type="submit">Poster</button>
+                        </form>
+                    {% endif %}
                     <br>
                     {% for comment in post.commentaires %}
-                        De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
+                        {% if myself is defined %}
+                            De: <a href="/search?username={{ user.user_identifier }}">{{ user.user_identifier }}</a>
+                        {% else %}
+                            De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
+                        {% endif %}
                         {% if myself is defined or acctualuser is defined %}
                             {% if acctualuser is defined and acctualuser != null and (acctualuser.username == comment.user_id.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}  
                                 <button type="submit" class="btn btn-primary ms-1"

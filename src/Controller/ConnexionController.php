@@ -32,8 +32,8 @@ class ConnexionController extends AbstractController{
     #[Route('/login', methods: ['POST'])]
     public function connexion(Request $request): Response
     {
-        $username = $request->request->get('username');
-        $password = $request->request->get('password');
+        $username = htmlspecialchars($request->request->get('username'), ENT_QUOTES);
+        $password = htmlspecialchars($request->request->get('password'), ENT_QUOTES);
         if (empty($username) || empty($password)) {
             return new Response('Les champs username et password sont obligatoires.', Response::HTTP_BAD_REQUEST);
         }

@@ -149,4 +149,29 @@ class PageController extends AbstractController {
         $response= $this->apiLinker->putData("/users/".$json->id, $json, $token);
         return new Response($response);
     }
+
+    #[Route('/createcomment', methods: ['POST'])]
+    public function createcomment(Request $request): Response
+    {
+        $commentaire= htmlspecialchars($request->request->get('commentaire'), ENT_QUOTES);
+        $postid= $_POST['post_id'];
+        if (empty($commentaire) || empty($commentaire)) {
+            return new Response('Les champs commentaire est obligatoire.', Response::HTTP_BAD_REQUEST);
+        }
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        
+        $jsonUser= $this->apiLinker->getData('/myself', $token);
+        $selfuser= json_decode($jsonUser); 
+
+        $jsUser= $this->apiLinker->getData('/users/search?username='.$selfuser->username, $token);
+        $user= json_decode($jsUser); 
+
+        $data= $this->jsonConverter->encodeToJson(['content' => $commentaire, "post_id" => $postid, "user_id" => $user->id]);
+        $response= $this->apiLinker->postData('/commentaire', $data, $token);
+        $responseObject= json_decode($response);
+
+        return $this->redirect("/");
+    }
+
 }
