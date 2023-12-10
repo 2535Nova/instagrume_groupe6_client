@@ -11,15 +11,34 @@
 
 {% block stylesheets %}
 	{{ parent() }}
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}  
     <style>
         input[type="file"] {
             display: none;
         }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}  
+     <script>
+        function changeInputType(postId) {
+            var type1= document.getElementById("type1_"+postId);
+            var type2= document.getElementById("type2_"+postId);
+
+            // Check the current type and toggle
+            if (type1.type === "hidden") {
+                type1.type = "text";
+            } else {
+                type1.type = "hidden";
+            }
+            if (type2.type === "hidden") {
+                type2.type = "submit";
+            } else {
+                type2.type = "hidden";
+            }
+            
+        }
+    </script>
 {% endblock %}
 
 {% block body %}
@@ -105,7 +124,7 @@
                     {% endif %}
                     <br>
                     {% for comment in post.commentaires %}
-                        De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
+                            De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
                         {% if myself is defined or acctualuser is defined %}
                             {% if acctualuser is defined and acctualuser != null and (acctualuser.username == comment.user_id.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}  
                                 <button type="submit" class="btn btn-primary ms-1"
@@ -118,10 +137,21 @@
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Supprimer
                                 </button>
-                            {% endif %}
+                            {% endif %}                         
                         {% endif %}
                         <br>
                         {{comment.content}}
+                        <button class="btn btn-secondary ms-1" onclick="changeInputType({{ comment.id }})"
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                            Répondre
+                        </button><br>
+                        {% if myself is defined or (acctualuser is defined and acctualuser != null) %}                                 
+                            <form class="d-flex my-1" action='/createreponse' method="POST">
+                                <input type="hidden" name="commentaire_id" value="{{ comment.id }}">
+                                <input id="type1_{{ comment.id }}" class="form-control w-auto" name="reponse" type="hidden" placeholder="Believe reponse comment">
+                                <input id="type2_{{ comment.id }}" class="btn btn-outline-success ms-2" value="Poster" type="hidden">
+                            </form>
+                        {% endif %}
                         <div class="container">
                             {% for reponse in comment.reponses %}
                                 De: <a href="/search?username={{ reponse.user.username }}">{{ reponse.user.username }}</a>
@@ -133,13 +163,13 @@
                                         </button>
 
                                         <button type="button" class="btn btn-sm btn-danger ms-1 delete-reponse-btn"
-                                        data-reponse-id="{{ reponse.id }}"
-                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                            data-reponse-id="{{ reponse.id }}"
+                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                         Supprimer</button>
-                                    {% endif %}
+                                    {% endif %}                                     
                                 {% endif %}
                                 <br>
-                                {{reponse.content}}<br>
+                                {{reponse.content}}<br>                               
                             {% endfor %}
                         </div>
                     {% endfor %}

@@ -154,7 +154,6 @@ class PageController extends AbstractController {
     public function createcomment(Request $request): Response
     {
         $commentaire= htmlspecialchars($request->request->get('commentaire'), ENT_QUOTES);
-        $postid= $_POST['post_id'];
         if (empty($commentaire) || empty($commentaire)) {
             return new Response('Les champs commentaire est obligatoire.', Response::HTTP_BAD_REQUEST);
         }
@@ -167,8 +166,31 @@ class PageController extends AbstractController {
         $jsUser= $this->apiLinker->getData('/users/search?username='.$selfuser->username, $token);
         $user= json_decode($jsUser); 
 
-        $data= $this->jsonConverter->encodeToJson(['content' => $commentaire, "post_id" => $postid, "user_id" => $user->id]);
+        $data= $this->jsonConverter->encodeToJson(['content' => $commentaire, "post_id" => $_POST['post_id'], "user_id" => $user->id]);
         $response= $this->apiLinker->postData('/commentaire', $data, $token);
+        $responseObject= json_decode($response);
+
+        return $this->redirect("/");
+    }
+
+    #[Route('/createreponse', methods: ['POST'])]
+    public function createreponse(Request $request): Response
+    {
+        $reponse= htmlspecialchars($request->request->get('reponse'), ENT_QUOTES);
+        if (empty($reponse)) {
+            return new Response('Les champs reponse est obligatoire.', Response::HTTP_BAD_REQUEST);
+        }
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        
+        $jsonUser= $this->apiLinker->getData('/myself', $token);
+        $selfuser= json_decode($jsonUser); 
+
+        $jsUser= $this->apiLinker->getData('/users/search?username='.$selfuser->username, $token);
+        $user= json_decode($jsUser); 
+
+        $data= $this->jsonConverter->encodeToJson(['content' => $reponse, "commentaire_id" => $_POST['commentaire_id'], "user_id" => $user->id]);
+        $response= $this->apiLinker->postData('/reponse', $data, $token);
         $responseObject= json_decode($response);
 
         return $this->redirect("/");
