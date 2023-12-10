@@ -115,7 +115,7 @@
                 </article>
                 <div>
                     Commentaires ({{post.commentaires|length}}):<br>     
-                    {% if myself is defined or (acctualuser is defined and acctualuser != null) %}              
+                    {% if post.islock == false and (myself is defined or (acctualuser is defined and acctualuser != null)) %}              
                         <form class="d-flex" action='/createcomment' method="POST">
                             <input type="hidden" name="post_id" value="{{ post.id }}">
                             <input class="form-control w-auto" name="commentaire" type="text" placeholder="Believe comment">
@@ -141,10 +141,12 @@
                         {% endif %}
                         <br>
                         {{comment.content}}
-                        <button class="btn btn-secondary ms-1" onclick="changeInputType({{ comment.id }})"
-                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                            Répondre
-                        </button><br>
+                        {% if post.islock == false %}
+                            <button class="btn btn-secondary ms-1" onclick="changeInputType({{ comment.id }})"
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                Répondre
+                            </button><br>
+                        {% endif %}
                         {% if myself is defined or (acctualuser is defined and acctualuser != null) %}                                 
                             <form class="d-flex my-1" action='/createreponse' method="POST">
                                 <input type="hidden" name="commentaire_id" value="{{ comment.id }}">
