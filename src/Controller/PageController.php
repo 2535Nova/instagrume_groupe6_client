@@ -196,4 +196,36 @@ class PageController extends AbstractController {
         return $this->redirect("/");
     }
 
+    #[Route('/lockpost', methods: ['POST'])]
+    public function lockpost(Request $request){
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        
+        $jsonUser= $this->apiLinker->getData('/myself', $token);
+        $selfuser= json_decode($jsonUser); 
+
+        $jsUser= $this->apiLinker->getData('/users/search?username='.$selfuser->username, $token);
+
+        $data= $this->jsonConverter->encodeToJson(['islock' => true, "description" => $_POST['description'], "image" => $_POST["image"]]);
+        $this->apiLinker->putData('/posts/'.$_POST["post_id"], $data, $token);
+
+        return $this->redirect("/");
+    }
+
+    #[Route('/unlockpost', methods: ['POST'])]
+    public function unlockpost(Request $request){
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        
+        $jsonUser= $this->apiLinker->getData('/myself', $token);
+        $selfuser= json_decode($jsonUser); 
+
+        $jsUser= $this->apiLinker->getData('/users/search?username='.$selfuser->username, $token);
+
+        $data= $this->jsonConverter->encodeToJson(['islock' => false, "description" => $_POST['description'], "image" => $_POST["image"]]);
+        $this->apiLinker->putData('/posts/'.$_POST["post_id"], $data, $token);
+
+        return $this->redirect("/");
+    }
+
 }
