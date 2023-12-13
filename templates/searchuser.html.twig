@@ -68,14 +68,16 @@
                 {% elseif (acctualuser != null and "ROLE_ADMIN" in acctualuser.roles) and "ROLE_ADMIN" not in user.roles %} 
                     <span class="col">
                         {% if user.ban == false %}
-                            <button type="button" class="btn btn-danger ban-put-btn"
-                                data-post-id="{{ user.id }}"
-                                data-post-username="{{ user.username }}"
-                                data-post-password="{{ user.password }}"
-                                data-post-avatar="{{ user.avatar }}"
-                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                                Bannir
-                            </button>
+                            <form method="POST" action="/ban">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <input type="hidden" name="username" value="{{ user.username }}">
+                                <input type="hidden" name="password" value="{{ user.password }}">
+                                <input type="hidden" name="avatar" value="{{ user.avatar }}">
+                                <button type="submit" class="btn btn-danger"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                    Bannir
+                                </button>
+                            </form>
                         {% else %}
                             <button type="button" class="btn btn-danger unban-put-btn"
                                 data-post-id="{{ user.id }}"

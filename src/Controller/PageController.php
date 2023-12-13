@@ -127,16 +127,15 @@ class PageController extends AbstractController {
         $response= $this->apiLinker->deleteData("/reponse/".$json->id, $token);
         return new Response($response);
     }
-
-    #[Route('/ban', methods: ['PUT'])]
+    #[Route('/ban', methods: ['POST'])]
     public function BanUser(Request $request){
         $session= $request->getSession();
         $token= $session->get('token-session');
-        $data= file_get_contents("php://input");
-        $json= json_decode($data);
+        
+        $data= $this->jsonConverter->encodeToJson(['ban' => true, "password" => $_POST["password"], "avatar"=> $_POST["avatar"], "username"=> $_POST["username"]]);
+        $this->apiLinker->putData('/users/'.$_POST["user_id"], $data, $token);
 
-        $response= $this->apiLinker->putData("/users/".$json->id, $json, $token);
-        return new Response($response);
+        return $this->redirect("/");
     }
 
     #[Route('/unban', methods: ['PUT'])]
