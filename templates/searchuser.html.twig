@@ -143,7 +143,7 @@
                         {% endif %}
                         <br>
                         {{comment.content}}
-                        {% if post.islock == false %}
+                        {% if post.islock == false and myself is defined or (acctualuser is defined and acctualuser != null) %}
                             <button class="btn btn-secondary ms-1" onclick="changeInputType({{ comment.id }})"
                                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                 Répondre
