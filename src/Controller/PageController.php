@@ -166,8 +166,7 @@ class PageController extends AbstractController {
         $user= json_decode($jsUser); 
 
         $data= $this->jsonConverter->encodeToJson(['description' => $description, "islock"=> false, "user_id" => $user->id]);
-        $response= $this->apiLinker->postData('/posts', $data, $token);
-        $responseObject= json_decode($response);
+        $this->apiLinker->postData('/posts', $data, $token);
 
         return $this->redirect("/");
     }
