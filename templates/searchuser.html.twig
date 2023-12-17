@@ -12,7 +12,7 @@
 {% block stylesheets %}
 	{{ parent() }}
     <style>
-        input[type="file"] {
+        #fileInput[type="file"] {
             display: none;
         }
     </style>
@@ -63,7 +63,7 @@
                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                             Modifier
                         </button>
-                        <input type="file" id="fileInput" style="display:none;" onchange="displayFileName(this)" accept=".png, .jpg, .jpeg">
+                        <input type="file" id="fileInput" onchange="displayFileName(this)" accept=".png, .jpg, .jpeg">
                     </form>
                 {% elseif (acctualuser != null and "ROLE_ADMIN" in acctualuser.roles) and "ROLE_ADMIN" not in user.roles %} 
                     <span class="col">

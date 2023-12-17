@@ -149,6 +149,29 @@ class PageController extends AbstractController {
         return $this->redirect("/");
     }
 
+    #[Route('/createpost', methods: ['POST'])]
+    public function createpost(Request $request): Response
+    {
+        $description= htmlspecialchars($_POST["description"], ENT_QUOTES);
+        if (empty($description) || empty($_FILES["file"]["name"])) {
+            return new Response('Les champs description ou file sont obligatoire.', Response::HTTP_BAD_REQUEST);
+        }
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+        
+        $jsonUser= $this->apiLinker->getData('/myself', $token);
+        $selfuser= json_decode($jsonUser); 
+
+        $jsUser= $this->apiLinker->getData('/users/search?username='.$selfuser->username, $token);
+        $user= json_decode($jsUser); 
+
+        $data= $this->jsonConverter->encodeToJson(['description' => $description, "islock"=> false, "user_id" => $user->id]);
+        $response= $this->apiLinker->postData('/posts', $data, $token);
+        $responseObject= json_decode($response);
+
+        return $this->redirect("/");
+    }
+
     #[Route('/createcomment', methods: ['POST'])]
     public function createcomment(Request $request): Response
     {

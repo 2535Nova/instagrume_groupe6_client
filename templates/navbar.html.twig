@@ -34,3 +34,20 @@
         </div>
     </nav>
 </header>
+
+<div id="myModal" class="form-connexion mb-5">
+    <h2 class="d-flex justify-content-center">Creation du Post</h2><br>
+    <form method="POST" action="/createpost" enctype="multipart/form-data">
+        <label for="description">Description du post:</label>
+        <input class="form-control" name="description" type="text" placeholder="Enter description" wfd-id="id0"><br>
+        <label for="file">Choisir une image:</label><br>
+        <input type="file" name="file" accept=".png, .jpg, .jpeg"><br><br>
+        <br>
+        <span>
+            <button class="btn btn-outline-success" type="submit">Créer</button>
+            <button class="btn btn-outline-dark" type="button" onclick="closeModal()">Annuler</button>
+        </span>
+    </form>      
+</div>
+<div id="overlay"></div>
+<div class="container mt-5">
