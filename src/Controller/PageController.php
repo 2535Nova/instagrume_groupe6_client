@@ -156,6 +156,10 @@ class PageController extends AbstractController {
         if (empty($description) || empty($_FILES["file"]["name"])) {
             return new Response('Les champs description ou file sont obligatoire.', Response::HTTP_BAD_REQUEST);
         }
+        if ($_FILES["file"]["size"] > (5 * 1024 * 1024)) {
+            return new Response("La taille du fichier est trop grande, la limite de taille du fichier est de 5Mo", Response::HTTP_BAD_REQUEST);
+        }
+
         $session= $request->getSession();
         $token= $session->get('token-session');
         
@@ -165,7 +169,10 @@ class PageController extends AbstractController {
         $jsUser= $this->apiLinker->getData('/users/search?username='.$selfuser->username, $token);
         $user= json_decode($jsUser); 
 
-        $data= $this->jsonConverter->encodeToJson(['description' => $description, "islock"=> false, "user_id" => $user->id]);
+        $fileContent= file_get_contents($_FILES["file"]["tmp_name"]);
+        $base64File= base64_encode($fileContent);
+
+        $data= $this->jsonConverter->encodeToJson(['description' => $description, "islock"=> false, "user_id" => $user->id, "image"=> $base64File]);
         $this->apiLinker->postData('/posts', $data, $token);
 
         return $this->redirect("/");
