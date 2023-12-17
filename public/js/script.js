@@ -1,3 +1,22 @@
+function openModal() {
+    document.getElementById('myModal').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+}
+
+// Function to close the modal
+function closeModal() {
+    document.getElementById('myModal').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+}
+
+// Event listener for the link
+document.addEventListener('DOMContentLoaded', function() {
+document.getElementById('openModalLink').addEventListener('click', function(event) {
+    event.preventDefault();
+    openModal();
+});
+});
+
 $(document).ready(function () {
     $('.delete-post-btn').on('click', function () {
         var postId= $(this).data('post-id');

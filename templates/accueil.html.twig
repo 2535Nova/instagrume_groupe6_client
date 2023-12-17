@@ -13,6 +13,18 @@
 {% block body %}
     {% include 'navbar.html.twig' %}
     <main>
+         <div id="myModal">
+            <form method="POST" action="#" enctype="multipart/form-data">
+                <p>Description du post</p>
+                <input class="form-control" name="description" type="text" placeholder="post description" wfd-id="id0">
+                <input type="file"><br><br>
+                <span>
+                    <button class="btn btn-outline-success" type="submit">Créer</button>
+                    <button class="btn btn-outline-dark" type="button" onclick="closeModal()">Annuler</button>
+                </span>
+            </form>      
+        </div>
+        <div id="overlay"></div>
         <div class="container mt-5">
             {% for post in posts %}
                 <article>
@@ -29,7 +41,8 @@
                                 <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
                                     data-post-id="{{ post.id }}"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                                Supprimer</button>
+                                    Supprimer
+                                </button>
                             {% endif %}
                             {% if "ROLE_ADMIN" in selfuser.roles and post.islock == false %}
                                 <form method="POST" action="/lockpost" class="d-inline-flex col">
