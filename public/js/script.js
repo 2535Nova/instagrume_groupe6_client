@@ -17,6 +17,19 @@ document.getElementById('openModalLink').addEventListener('click', function(even
 });
 });
 
+
+function openModal2() {
+    document.getElementById('myModal2').style.display = 'block';
+    document.getElementById('overlay2').style.display = 'block';
+}
+
+// Function to close the modal
+function closeModal2() {
+    document.getElementById('myModal2').style.display = 'none';
+    document.getElementById('overlay2').style.display = 'none';
+}
+
+
 $(document).ready(function () {
     $('.delete-post-btn').on('click', function () {
         var postId= $(this).data('post-id');
