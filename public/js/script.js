@@ -15,18 +15,21 @@ document.getElementById('openModalLink').addEventListener('click', function(even
     event.preventDefault();
     openModal();
 });
+
 });
 
 
-function openModal2() {
+function openModal2(myVariable) {
+    document.getElementById("myInput").value = myVariable;
     document.getElementById('myModal2').style.display = 'block';
-    document.getElementById('overlay2').style.display = 'block';
+    document.getElementById('overlay2').style.display = 'block';   
 }
 
 // Function to close the modal
 function closeModal2() {
     document.getElementById('myModal2').style.display = 'none';
     document.getElementById('overlay2').style.display = 'none';
+    document.getElementById("myInput").value ="";
 }
 
 
