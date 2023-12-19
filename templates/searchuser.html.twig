@@ -19,12 +19,11 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}  
-     <script>
+    {{ parent() }}
+    <script>
         function changeInputType(postId) {
             var type1= document.getElementById("type1_"+postId);
             var type2= document.getElementById("type2_"+postId);
-
             // Check the current type and toggle
             if (type1.type === "hidden") {
                 type1.type = "text";
@@ -35,8 +34,7 @@
                 type2.type = "submit";
             } else {
                 type2.type = "hidden";
-            }
-            
+            }  
         }
     </script>
 {% endblock %}
@@ -57,14 +55,30 @@
             <span class= "row ps-3">
                 {{user.username}}
                 {% if myself is defined %}
-                    <form class="col" methode="POST" enctype="multipart/form-data">
-                        <button type="submit" class="btn btn-primary"
-                            onclick="document.getElementById('fileInput').click();"
-                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                            Modifier
-                        </button>
-                        <input type="file" id="fileInput" onchange="displayFileName(this)" accept=".png, .jpg, .jpeg">
-                    </form>
+                    <button type="submit" class="btn btn-primary w-auto ms-2"
+                        onclick="openModalProfil()"
+                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                        Modifier
+                    </button>
+                    <div id="myModalProfil" class="form-connexion mb-5 w-auto">
+                        <h2 class="d-flex justify-content-center">Modification du Profil</h2><br>
+                        <form method="POST" action="#" enctype="multipart/form-data">
+                            <label class="label-champ">Nouveau mot de passe : </label><br>
+                            <input class="form-control" spellcheck="false" type="password" name="password" placeholder="Nouveau mot de passe" autocomplete="new-password"><br>
+
+                            <label class="label-champ">Confirmer nouveau mot de passe : </label><br>
+                            <input class="form-control" spellcheck="false" type="password" name="repassword" placeholder="Confirmer mot de passe" autocomplete="new-password"><br>
+
+                            <label for="file">Choisir une nouvelle photo de profil:</label><br>
+                            <input class="form-control" type="file" name="file" accept=".png, .jpg, .jpeg"><br>
+                            <br>
+                            <span>
+                                <button class="btn btn-outline-primary" type="submit">Modifier</button>
+                                <button class="btn btn-outline-secondary" type="button" onclick="closeModalProfil()">Annuler</button>
+                            </span>
+                        </form>      
+                    </div>
+                    <div id="overlayProfil"></div>
                 {% elseif (acctualuser != null and "ROLE_ADMIN" in acctualuser.roles) and "ROLE_ADMIN" not in user.roles %} 
                     <span class="col">
                         {% if user.ban == false %}
@@ -95,6 +109,7 @@
         <br>
         <div class="container">
             {% for post in user.posts %}
+                <br>
                 <article>
                     <img src="{{post.image}}"></img><br>
                     <span>{{post.description}}</span><br>
@@ -103,7 +118,7 @@
                             {% if acctualuser is defined and acctualuser != null and ("ROLE_ADMIN" in acctualuser.roles) or (myself is defined and ("ROLE_ADMIN" in user.roles or myself == "My Profile")) %} 
                                 {% set lock = null %}
                                 {% if post.islock == true %} {% set lock = 1 %} {% else %} {% set lock = 0 %} {% endif %}
-                                <button type="submit" class="btn btn-primary" onclick="openModal2('{{post.description}}', {{post.user}}, {{post.id}}, {{lock}})" id="myDataButton"
+                                <button type="submit" class="btn btn-primary" onclick="openModal2('{{post.description}}', {{post.user}}, {{post.id}}, {{lock}})"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
                                 </button>

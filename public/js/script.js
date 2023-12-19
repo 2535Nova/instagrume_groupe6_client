@@ -19,6 +19,7 @@ document.getElementById('openModalLink').addEventListener('click', function(even
 });
 
 
+
 function openModal2(myVariable, userid, postid,  islock) {
     document.getElementById("postid").value= postid;
     document.getElementById("Inputhide").value= userid;
@@ -33,6 +34,19 @@ function closeModal2() {
     document.getElementById('myModal2').style.display = 'none';
     document.getElementById('overlay2').style.display = 'none';
     document.getElementById("myInput").value ="";
+}
+
+
+
+function openModalProfil() {
+    document.getElementById('myModalProfil').style.display= 'block';
+    document.getElementById('overlayProfil').style.display= 'block'; 
+}
+
+// Function to close the modal
+function closeModalProfil() {
+    document.getElementById('myModalProfil').style.display= 'none';
+    document.getElementById('overlayProfil').style.display= 'none';
 }
 
 
