@@ -55,7 +55,10 @@
 
 <div id="myModal2" class="form-connexion mb-5">
     <h2 class="d-flex justify-content-center">Modification du Post</h2><br>
-    <form method="POST" action="#" enctype="multipart/form-data">
+    <form method="POST" action="/modifpost" enctype="multipart/form-data">
+    <input type="hidden" name="postid" value="" id="postid" wfd-id="id0">
+        <input type="hidden" name="userid" value="" id="Inputhide" wfd-id="id0">
+        <input type="hidden" name="islock" value="" id="myInputhidden" wfd-id="id0">
         <label for="description">Description du post:</label>
         <input class="form-control" name="description" type="text" placeholder="Enter new description" id="myInput" wfd-id="id0"><br>
         <label for="file">Choisir une nouvelle image:</label><br>

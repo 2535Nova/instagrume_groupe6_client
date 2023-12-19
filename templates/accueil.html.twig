@@ -20,7 +20,7 @@
                         De: <a href="/search?username={{ post.user.username }}">{{ post.user.username }}</a>
                         {% if selfuser is defined and selfuser != null %}
                             {% if "ROLE_ADMIN" in selfuser.roles or selfuser.username == post.user.user_identifier %}
-                                <button type="submit" class="btn btn-primary ms-1" onclick="openModal2('{{post.description}}')" id="myDataButton"
+                                <button type="submit" class="btn btn-primary ms-1" onclick="openModal2('{{post.description}}', {{post.user.id}}, {{post.id}}, {% if post.islock == true %} true {% else %} false {% endif %})" id="myDataButton"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
                                 </button>

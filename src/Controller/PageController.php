@@ -178,6 +178,32 @@ class PageController extends AbstractController {
         return $this->redirect("/");
     }
 
+    #[Route('/modifpost', methods: ['POST'])]
+    public function modifpost(Request $request): Response
+    {
+        $description= htmlspecialchars($_POST["description"], ENT_QUOTES);
+        $islock= htmlspecialchars($_POST["islock"], ENT_QUOTES);
+        $userid= htmlspecialchars($_POST["userid"], ENT_QUOTES);
+        $postid= htmlspecialchars($_POST["postid"], ENT_QUOTES);
+        if (empty($description) || empty($_FILES["file"]["name"]) || empty($islock) || empty($userid) || empty($postid)) {
+            return new Response('Les champs description ou file sont obligatoire.', Response::HTTP_BAD_REQUEST);
+        }
+        if ($_FILES["file"]["size"] > (5 * 1024 * 1024)) {
+            return new Response("La taille du fichier est trop grande, la limite de taille du fichier est de 5Mo", Response::HTTP_BAD_REQUEST);
+        }
+
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+
+        $fileContent= file_get_contents($_FILES["file"]["tmp_name"]);
+        $base64File= base64_encode($fileContent);
+
+        $data= $this->jsonConverter->encodeToJson(['description' => $description, "islock"=> $islock, "user_id" => $userid, "image"=> $base64File]);
+        $this->apiLinker->putData('/posts/'.$postid, $data, $token);
+
+        return $this->redirect("/");
+    }
+    
     #[Route('/createcomment', methods: ['POST'])]
     public function createcomment(Request $request): Response
     {

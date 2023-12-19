@@ -19,10 +19,13 @@ document.getElementById('openModalLink').addEventListener('click', function(even
 });
 
 
-function openModal2(myVariable) {
+function openModal2(myVariable, userid, postid,  islock) {
+    document.getElementById("postid").value= postid;
+    document.getElementById("Inputhide").value= userid;
+    document.getElementById("myInputhidden").value= islock;
     document.getElementById("myInput").value = myVariable;
     document.getElementById('myModal2').style.display = 'block';
-    document.getElementById('overlay2').style.display = 'block';   
+    document.getElementById('overlay2').style.display = 'block'; 
 }
 
 // Function to close the modal
