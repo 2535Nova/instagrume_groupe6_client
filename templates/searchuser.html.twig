@@ -101,7 +101,9 @@
                     <span>
                         {% if myself is defined %}
                             {% if "ROLE_ADMIN" in user.roles or user.id == post.user %}
-                                <button type="submit" class="btn btn-primary" onclick="openModal2('{{post.description}}', {{post.user.id}}, {{post.id}}, {% if post.islock == true %} true {% else %} false {% endif %})" id="myDataButton"
+                                 {% set lock = null %}
+                                {% if post.islock == true %} {% set lock = 1 %} {% else %} {% set lock = 0 %} {% endif %}
+                                <button type="submit" class="btn btn-primary" onclick="openModal2('{{post.description}}', {{post.user}}, {{post.id}}, {{lock}})" id="myDataButton"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
                                 </button>

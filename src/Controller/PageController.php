@@ -185,7 +185,7 @@ class PageController extends AbstractController {
         $islock= htmlspecialchars($_POST["islock"], ENT_QUOTES);
         $userid= htmlspecialchars($_POST["userid"], ENT_QUOTES);
         $postid= htmlspecialchars($_POST["postid"], ENT_QUOTES);
-        if (empty($description) || empty($_FILES["file"]["name"]) || empty($islock) || empty($userid) || empty($postid)) {
+        if (empty($description) || empty($_FILES["file"]["name"])) {
             return new Response('Les champs description ou file sont obligatoire.', Response::HTTP_BAD_REQUEST);
         }
         if ($_FILES["file"]["size"] > (5 * 1024 * 1024)) {
