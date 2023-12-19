@@ -26,7 +26,6 @@ function openModal2(myVariable, userid, postid,  islock) {
     document.getElementById("myInput").value = myVariable;
     document.getElementById('myModal2').style.display = 'block';
     document.getElementById('overlay2').style.display = 'block'; 
-    console.log(islock);
 }
 
 // Function to close the modal

@@ -43,7 +43,7 @@
                                         Lock
                                     </button>
                                 </form>
-                            {% else %}
+                            {% elseif "ROLE_ADMIN" in selfuser.roles and post.islock == true %}
                                 <form method="POST" action="/unlockpost" class="d-inline-flex col">
                                     <input type="hidden" name="post_id" value="{{ post.id }}">
                                     <input type="hidden" name="image" value="{{ post.image }}">
