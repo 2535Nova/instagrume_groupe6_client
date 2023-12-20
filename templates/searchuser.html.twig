@@ -144,7 +144,7 @@
             {% for post in user.posts %}
                 <br>
                 <article>
-                    <img src="{{post.image}}"></img><br>
+                    <img src="http://127.0.0.1/images/posts/{{ post.image }}"></img><br>
                     <span>{{post.description}}</span><br>
                     <span>
                         {% if myself is defined or acctualuser is defined %}
