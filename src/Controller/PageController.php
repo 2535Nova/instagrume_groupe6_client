@@ -145,7 +145,7 @@ class PageController extends AbstractController {
         $session= $request->getSession();
         $token= $session->get('token-session');
         
-        $data= $this->jsonConverter->encodeToJson(['ban' => false, "password" => $_POST["password"], "avatar"=> $_POST["avatar"], "username"=> $_POST["username"]]);
+        $data= $this->jsonConverter->encodeToJson(['ban' => false, "password" => $_POST["password"], "avatar"=> $_POST["avatar"]]);
         $this->apiLinker->putData('/users/'.$_POST["user_id"], $data, $token);
 
         return $this->redirect("/");
@@ -180,27 +180,43 @@ class PageController extends AbstractController {
         return $this->redirect("/");
     }
 
+    #[Route('/modifcomment', methods: ['POST'])]
+    public function modifcomment(Request $request): Response
+    {
+        $content= htmlspecialchars($_POST["content"], ENT_QUOTES);
+        $commentid= htmlspecialchars($_POST["commentid"], ENT_QUOTES);
+        if (empty($content)) {
+            return new Response('Le champ description est obligatoire.', Response::HTTP_BAD_REQUEST);
+        }
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+
+        $data= $this->jsonConverter->encodeToJson(['content' => $content]);
+        $this->apiLinker->putData('/commentaire/'.$commentid, $data, $token);
+
+        return $this->redirect("/");
+    }
+
     #[Route('/modifpost', methods: ['POST'])]
     public function modifpost(Request $request): Response
     {
         $description= htmlspecialchars($_POST["description"], ENT_QUOTES);
         $islock= htmlspecialchars($_POST["islock"], ENT_QUOTES);
-        $userid= htmlspecialchars($_POST["userid"], ENT_QUOTES);
+        $username= htmlspecialchars($_POST["userid"], ENT_QUOTES);
         $postid= htmlspecialchars($_POST["postid"], ENT_QUOTES);
-        if (empty($description) || empty($_FILES["file"]["name"])) {
-            return new Response('Les champs description ou file sont obligatoire.', Response::HTTP_BAD_REQUEST);
+        if (empty($description)) {
+            return new Response('Le champ description est obligatoire.', Response::HTTP_BAD_REQUEST);
         }
-        if ($_FILES["file"]["size"] > (5 * 1024 * 1024)) {
-            return new Response("La taille du fichier est trop grande, la limite de taille du fichier est de 5Mo", Response::HTTP_BAD_REQUEST);
-        }
-
         $session= $request->getSession();
         $token= $session->get('token-session');
 
-        $fileContent= file_get_contents($_FILES["file"]["tmp_name"]);
-        $base64File= base64_encode($fileContent);
+        $user= $this->apiLinker->getData("/search?username=".$username, $token);
+        $user= json_decode($user);
 
-        $data= $this->jsonConverter->encodeToJson(['description' => $description, "islock"=> $islock, "user_id" => $userid, "image"=> $base64File]);
+        $thispost= $this->apiLinker->getData("/posts/".$postid, $token);
+        $thispost= json_decode($thispost);
+
+        $data= $this->jsonConverter->encodeToJson(['description' => $description, "islock"=> $islock, "user_id" => $user->id, "image"=> $thispost->image]);
         $this->apiLinker->putData('/posts/'.$postid, $data, $token);
 
         return $this->redirect("/");

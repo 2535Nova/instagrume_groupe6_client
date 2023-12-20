@@ -41,6 +41,36 @@
 
 {% block body %}
     {% include 'navbar.html.twig' %}
+    <div id="myModalcomment" class="form-connexion mb-5">
+        <h2 class="d-flex justify-content-center">Modification du Commentaire</h2><br>
+        <form method="POST" action="/modifcomment" enctype="multipart/form-data">
+        <input type="hidden" name="commentid" value="" id="commentid" wfd-id="id0">
+            <label for="commentaire">Contenu du commentaire:</label>
+            <input class="form-control" name="content" type="text" placeholder="Enter new commentaire" id="in" wfd-id="id0"><br>
+            <br>
+            <span>
+                <button class="btn btn-outline-primary" type="submit">Modifier</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="closeModalcomment()">Annuler</button>
+            </span>
+        </form>      
+    </div>
+    <div id="overlaycomment"></div>
+
+    <div id="myModalreponse" class="form-connexion mb-5">
+        <h2 class="d-flex justify-content-center">Modification de la reponse</h2><br>
+        <form method="POST" action="#" enctype="multipart/form-data">
+        <input type="hidden" name="commentid" value="" id="commentid" wfd-id="id0">
+            <label for="commentaire">Contenu de la reponse:</label>
+            <input class="form-control" name="content" type="text" placeholder="Enter new commentaire" id="in" wfd-id="id0"><br>
+            <br>
+            <span>
+                <button class="btn btn-outline-primary" type="submit">Modifier</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="closeModalreponse()">Annuler</button>
+            </span>
+        </form>      
+    </div>
+    <div id="overlayreponse"></div>
+
     <main>
         <div class="container mt-4">
             <div class="d-flex justify-content-center align-items-center rounded-circle overflow-hidden shadow-lg bg-light" style="width: 100px; height: 100px;">
@@ -121,7 +151,7 @@
                             {% if acctualuser is defined and acctualuser != null and ("ROLE_ADMIN" in acctualuser.roles) or (myself is defined and ("ROLE_ADMIN" in user.roles or myself == "My Profile")) %} 
                                 {% set lock = null %}
                                 {% if post.islock == true %} {% set lock = 1 %} {% else %} {% set lock = 0 %} {% endif %}
-                                <button type="submit" class="btn btn-primary" onclick="openModal2('{{post.description}}', {{post.user}}, {{post.id}}, {{lock}})"
+                                <button type="submit" class="btn btn-primary" onclick="openModal2('{{post.description}}', '{{user.username}}', {{post.id}}, {{lock}})"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
                                 </button>
@@ -149,7 +179,7 @@
                         De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
                         {% if myself is defined or acctualuser is defined %}
                             {% if acctualuser is defined and acctualuser != null and (acctualuser.username == comment.user_id.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}  
-                                <button type="submit" class="btn btn-primary ms-1"
+                                <button type="submit" class="btn btn-primary ms-1" onclick="openModalcomment('{{comment.content}}', {{comment.id}})"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
                                 </button>
@@ -181,7 +211,7 @@
                                 De: <a href="/search?username={{ reponse.user.username }}">{{ reponse.user.username }}</a>
                                 {% if myself is defined or (acctualuser is defined and acctualuser != null) %}
                                     {% if acctualuser is defined and acctualuser != null and (acctualuser.username == reponse.user.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}
-                                        <button type="submit" class="btn btn-primary ms-1"
+                                        <button type="submit" class="btn btn-primary ms-1" onclick="openModalreponse('{{reponse.content}}', {{reponse.id}})"
                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                             Modifier
                                         </button>

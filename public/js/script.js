@@ -37,6 +37,35 @@ function closeModal2() {
 }
 
 
+function openModalcomment(content, id) {
+    document.getElementById("commentid").value= id;
+    document.getElementById("in").value= content;
+    document.getElementById('myModalcomment').style.display= 'block';
+    document.getElementById('overlaycomment').style.display= 'block';
+}
+
+// Function to close the modal
+function closeModalcomment() {
+    document.getElementById('myModalcomment').style.display= 'none';
+    document.getElementById('overlaycomment').style.display= 'none';
+    document.getElementById("in").value =""; 
+}
+
+
+function openModalreponse(content, id) {
+    document.getElementById("commentid").value= id;
+    document.getElementById("in").value= content;
+    document.getElementById('myModalreponse').style.display= 'block';
+    document.getElementById('overlayreponse').style.display= 'block';
+}
+
+// Function to close the modal
+function closeModalreponse() {
+    document.getElementById('myModalreponse').style.display= 'none';
+    document.getElementById('overlayreponse').style.display= 'none';
+    document.getElementById("in").value =""; 
+}
+
 
 function openModalProfil() {
     document.getElementById('myModalProfil').style.display= 'block';
