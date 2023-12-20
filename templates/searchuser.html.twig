@@ -78,14 +78,14 @@
                 {% if user.avatar == null %}
                     src="{{ asset("images/default.png") }}"
                 {% else %}
-                    src="{{ user.avatar }}"
+                    src="http://127.0.0.1/images/user/{{ user.avatar }}"
                 {% endif %}
                 >
             </div>    
             <span class= "row ps-3">
                 {{user.username}}
                 {% if myself is defined %}
-                    <button type="submit" class="btn btn-primary w-auto ms-2"
+                    <button type="submit" class="btn btn-warning w-auto ms-2"
                         onclick="openModalProfil()"
                         style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                         Modifier

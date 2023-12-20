@@ -211,7 +211,7 @@ class PageController extends AbstractController {
         $data= $this->jsonConverter->encodeToJson(['content' => $content]);
         $this->apiLinker->putData('/reponse/'.$reponseid, $data, $token);
 
-        return $this->redirect("/");
+        return $this->redirect("/myself");
     }
 
     #[Route('/modifpost', methods: ['POST'])]
@@ -256,10 +256,9 @@ class PageController extends AbstractController {
         $user= json_decode($jsUser); 
 
         $data= $this->jsonConverter->encodeToJson(['content' => $commentaire, "post_id" => $_POST['post_id'], "user_id" => $user->id]);
-        $response= $this->apiLinker->postData('/commentaire', $data, $token);
-        $responseObject= json_decode($response);
+        $this->apiLinker->postData('/commentaire', $data, $token);
 
-        return $this->redirect("/");
+        return $this->redirect("/myself");
     }
 
     #[Route('/createreponse', methods: ['POST'])]
