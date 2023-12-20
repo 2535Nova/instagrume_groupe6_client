@@ -197,6 +197,23 @@ class PageController extends AbstractController {
         return $this->redirect("/");
     }
 
+    #[Route('/modifreponse', methods: ['POST'])]
+    public function modifreponse(Request $request): Response
+    {
+        $content= htmlspecialchars($_POST["content"], ENT_QUOTES);
+        $reponseid= htmlspecialchars($_POST["reponseid"], ENT_QUOTES);
+        if (empty($content)) {
+            return new Response('Le champ description est obligatoire.', Response::HTTP_BAD_REQUEST);
+        }
+        $session= $request->getSession();
+        $token= $session->get('token-session');
+
+        $data= $this->jsonConverter->encodeToJson(['content' => $content]);
+        $this->apiLinker->putData('/reponse/'.$reponseid, $data, $token);
+
+        return $this->redirect("/");
+    }
+
     #[Route('/modifpost', methods: ['POST'])]
     public function modifpost(Request $request): Response
     {
