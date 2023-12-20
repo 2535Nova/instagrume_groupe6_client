@@ -17,15 +17,15 @@
             {% for post in posts %}
                 <article>
                     <span>
-                        De: <a href="/search?username={{ post.user.username }}">{{ post.user.username }}</a>
+                        <a href="/search?user_id={{ post.user_id }}">{{ post.user_id }}</a>
                         {% if selfuser is defined and selfuser != null %}
                             {% if "ROLE_ADMIN" in selfuser.roles or selfuser.username == post.user.user_identifier %}
                                 {% set lock = null %}
                                 {% if post.islock == true %} {% set lock = 1 %} {% else %} {% set lock = 0 %} {% endif %}
-                                <button type="submit" class="btn btn-primary ms-1" onclick="openModal2('{{post.description}}', {{post.user.id}}, {{post.id}}, {{lock}})" id="myDataButton"
+                                {#<button type="submit" class="btn btn-primary ms-1" onclick="openModal2('{{post.description}}', {{post.user.id}}, {{post.id}}, {{lock}})" id="myDataButton"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
-                                </button>
+                                </button>#}
 
                                 <button type="button" class="btn btn-sm btn-danger ms-1 delete-post-btn"
                                     data-post-id="{{ post.id }}"

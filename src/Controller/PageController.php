@@ -27,6 +27,8 @@ class PageController extends AbstractController {
         $session = $request->getSession();
         $token = $session->get('token-session');
 
+       // $this->apiLinker->getData("/users/", $token);
+
         $jsonposts= $this->apiLinker->getData("/posts", $token);
         $posts= json_decode($jsonposts);
         shuffle($posts);

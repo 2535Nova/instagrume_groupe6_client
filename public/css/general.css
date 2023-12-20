@@ -72,7 +72,7 @@ html, body {
 #myModalProfil {
     display: none;
     position: fixed;
-    top: 40%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 20px;
