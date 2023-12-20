@@ -53,8 +53,8 @@ function closeModalcomment() {
 
 
 function openModalreponse(content, id) {
-    document.getElementById("commentid").value= id;
-    document.getElementById("in").value= content;
+    document.getElementById("incontent").value= content;
+    document.getElementById("reponseid").value= id;
     document.getElementById('myModalreponse').style.display= 'block';
     document.getElementById('overlayreponse').style.display= 'block';
 }
