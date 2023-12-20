@@ -19,7 +19,7 @@
                     <span>
                         De: <a href="/search?username={{ post.username }}">{{ post.username }}</a>
                         {% if selfuser is defined and selfuser != null %}
-                            {% if "ROLE_ADMIN" in selfuser.roles or selfuser.username == post.user.user_identifier %}
+                            {% if "ROLE_ADMIN" in selfuser.roles or selfuser.username == post.username %}
                                 {% set lock = null %}
                                 {% if post.islock == true %} {% set lock = 1 %} {% else %} {% set lock = 0 %} {% endif %}
                                 <button type="submit" class="btn btn-primary ms-1" onclick="openModal2('{{post.description}}', '{{post.username}}', {{post.id}}, {{lock}})" id="myDataButton"
