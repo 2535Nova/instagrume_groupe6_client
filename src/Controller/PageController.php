@@ -237,8 +237,8 @@ public function modifprofil(Request $request): Response
 
     // Handle file upload
     $base64File = base64_encode($user->avatar);
-    if (!empty($_FILES["file"])) {
-        $fileContent = file_get_contents($_FILES["file"]);
+    if (!empty($_FILES["file"]["tmp_name"])) {
+        $fileContent = file_get_contents($_FILES["file"]["tmp_name"]);
         $base64File = base64_encode($fileContent);
     }
 

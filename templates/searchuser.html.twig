@@ -78,7 +78,7 @@
                 {% if user.avatar == null %}
                     src="{{ asset("images/default.png") }}"
                 {% else %}
-                    src="http://127.0.0.1/images/user/{{ user.avatar }}"
+                    src="http://127.0.0.1:3000/images/user/{{ user.avatar }}"
                 {% endif %}
                 >
             </div>    
@@ -144,7 +144,7 @@
             {% for post in user.posts %}
                 <br>
                 <article>
-                    <img src="http://127.0.0.1/images/posts/{{ post.image }}"></img><br>
+                    <img class="w-25" src="http://127.0.0.1:3000/images/post/{{ post.image }}"></img><br>
                     <span>{{post.description}}</span><br>
                     <span>
                         {% if myself is defined or acctualuser is defined %}
