@@ -214,6 +214,60 @@ class PageController extends AbstractController {
         return $this->redirect("/myself");
     }
 
+    #[Route('/modifprofil', methods: ['POST'])]
+public function modifprofil(Request $request): Response
+{
+    // Sanitize input values
+    $cupassword = htmlspecialchars($request->request->get("cupassword"), ENT_QUOTES);
+    $password = htmlspecialchars($request->request->get("password"), ENT_QUOTES);
+    $repassword = htmlspecialchars($request->request->get("repassword"), ENT_QUOTES);
+
+    // Check file size
+    if ($_FILES["file"]["size"] > (5 * 1024 * 1024)) {
+        return new Response("La taille du fichier est trop grande, la limite de taille du fichier est de 5Mo", Response::HTTP_BAD_REQUEST);
+    }
+
+    // Get session and token
+    $session = $request->getSession();
+    $token = $session->get('token-session');
+
+    // Fetch user data
+    $myself = json_decode($this->apiLinker->getData("/myself", $token));
+    $user = json_decode($this->apiLinker->getData("/users/search?username=" . $myself->username, $token));
+
+    // Handle file upload
+    $base64File = base64_encode($user->avatar);
+    if (!empty($_FILES["file"])) {
+        $fileContent = file_get_contents($_FILES["file"]);
+        $base64File = base64_encode($fileContent);
+    }
+
+    // Handle password update
+    if (!empty($cupassword) && !empty($password) && !empty($repassword)) {
+        if ($password === $repassword) {
+            $cupassword = $password;
+        }
+    } else {
+        $cupassword = $user->password;
+    }
+
+    // Prepare data for API update
+    $data = $this->jsonConverter->encodeToJson([
+        "password" => $cupassword,
+        "avatar" => $base64File,
+        "roles" => $myself->roles,
+        "ban" => $user->ban,
+        "username"=> $myself->username
+    ]);
+
+    // Make API request to update user data
+    $this->apiLinker->putData("/users/" . $user->id, $data, $token);
+
+    // Redirect to the user's profile page
+    return $this->redirect("/myself");
+}
+
+
     #[Route('/modifpost', methods: ['POST'])]
     public function modifpost(Request $request): Response
     {
