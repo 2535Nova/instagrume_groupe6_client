@@ -75,7 +75,7 @@
         <div class="container mt-4">
             <div class="d-flex justify-content-center align-items-center rounded-circle overflow-hidden shadow-lg bg-light" style="width: 100px; height: 100px;">
                 <img class="img-fluid w-100 h-100 object-fit-cover" 
-                {% if user.avatar == null %}
+                {% if user.avatar == null or user.avatar == "null" %}
                     src="{{ asset("images/default.png") }}"
                 {% else %}
                     src="http://127.0.0.1:3000/images/user/{{ user.avatar }}"
