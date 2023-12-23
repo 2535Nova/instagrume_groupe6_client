@@ -305,13 +305,13 @@ public function modifprofil(Request $request): Response
         $session = $request->getSession();
         $token = $session->get('token-session');
 
-        $user = $this->apiLinker->getData("/search?username=" . $username, $token);
+        $user = $this->apiLinker->getData("/users/search?username=" . $username, $token);
         $user = json_decode($user);
 
         $thispost = $this->apiLinker->getData("/posts/" . $postid, $token);
         $thispost = json_decode($thispost);
 
-        $data = $this->jsonConverter->encodeToJson(['description' => $description, "islock" => $islock, "user_id" => $user->id, "image" => $thispost->image]);
+        $data = $this->jsonConverter->encodeToJson(['description' => $description, "islock" => $islock, "user_id" => $user->id]);
         $this->apiLinker->putData('/posts/' . $postid, $data, $token);
 
         return $this->redirect("/");
