@@ -126,14 +126,16 @@
                                 </button>
                             </form>
                         {% else %}
-                            <button type="button" class="btn btn-danger unban-put-btn"
-                                data-post-id="{{ user.id }}"
-                                data-post-username="{{ user.username }}"
-                                data-post-password="{{ user.password }}"
-                                data-post-avatar="{{ user.avatar }}"
-                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                                Debannir
-                            </button>
+                            <form method="POST" action="/unban">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <input type="hidden" name="username" value="{{ user.username }}">
+                                <input type="hidden" name="password" value="{{ user.password }}">
+                                <input type="hidden" name="avatar" value="{{ user.avatar }}">
+                                <button type="submit" class="btn btn-danger"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                    Debannir
+                                </button>
+                            </form>
                         {% endif %}
                     </span>
                 {% endif %}

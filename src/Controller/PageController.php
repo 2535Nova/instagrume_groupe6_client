@@ -141,29 +141,32 @@ class PageController extends AbstractController
         $response = $this->apiLinker->deleteData("/reponse/" . $json->id, $token);
         return new Response($response);
     }
+
     #[Route('/ban', methods: ['POST'])]
     public function BanUser(Request $request)
     {
         $session = $request->getSession();
         $token = $session->get('token-session');
-
-        $jsonUser = $this->apiLinker->getData('/myself', $token);
-        $selfuser = json_decode($jsonUser);
         
-
-        $data = $this->jsonConverter->encodeToJson(['ban' => true, "roles" => $selfuser->roles]);
+        $targetuser= $this->apiLinker->getData("/users/".$_POST["user_id"], $token);
+        $targetuser= json_decode($targetuser);
+        
+        $data = $this->jsonConverter->encodeToJson(['ban' => true, "roles" => $targetuser->roles]);
         $this->apiLinker->putData('/users/' . $_POST["user_id"], $data, $token);
 
         return $this->redirect("/");
     }
 
-    #[Route('/unban', methods: ['PUT'])]
+    #[Route('/unban', methods: ['POST'])]
     public function UnBanUser(Request $request)
     {
         $session = $request->getSession();
         $token = $session->get('token-session');
 
-        $data = $this->jsonConverter->encodeToJson(['ban' => false, "roles" => $token->roles]);
+        $targetuser= $this->apiLinker->getData("/users/".$_POST["user_id"], $token);
+        $targetuser= json_decode($targetuser);
+        
+        $data = $this->jsonConverter->encodeToJson(['ban' => false, "roles" => $targetuser->roles]);
         $this->apiLinker->putData('/users/' . $_POST["user_id"], $data, $token);
 
         return $this->redirect("/");
