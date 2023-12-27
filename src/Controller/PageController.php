@@ -193,18 +193,16 @@ class PageController extends AbstractController
     $user = json_decode($jsUser);
 
     $fileContent = file_get_contents($file->getPathname());
-    
+
     // Obtenez l'extension du fichier
     $fileExtension = $file->getClientOriginalExtension();
     
-    // Encodez l'extension en base64
-    $base64Extension = base64_encode($fileExtension);
-    
     // Encodez le contenu du fichier en base64
     $base64FileContent = base64_encode($fileContent);
-
-    // Concaténez l'extension et le contenu du fichier encodé en base64 avec le type MIME
-    $base64File = 'data:image/' . $fileExtension . ';base64,' . $base64Extension . $base64FileContent;
+    
+    // Concaténez l'extension, le type MIME et le contenu du fichier encodé en base64
+    $base64File = 'data:image/' . $fileExtension . ';base64,' . $base64FileContent;
+    
 
     $data = $this->jsonConverter->encodeToJson([
         'user_id' => $user->id,

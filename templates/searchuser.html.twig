@@ -163,6 +163,27 @@
                                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                 Supprimer</button>
                             {% endif %}
+                            {% if acctualuser is defined and "ROLE_ADMIN" in acctualuser.roles or (myself is defined and ("ROLE_ADMIN" in user.roles or myself == "My Profile")) and post.islock == false %}
+                                <form method="POST" action="/lockpost" class="d-inline-flex col">
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <input type="hidden" name="image" value="{{ post.image }}">
+                                    <input type="hidden" name="description" value="{{ post.description }}">
+                                    <button type="submit" class="btn btn-secondary ms-1"
+                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                        Lock
+                                    </button>
+                                </form>
+                            {% elseif acctualuser is defined and "ROLE_ADMIN" in acctualuser.roles or (myself is defined and ("ROLE_ADMIN" in user.roles or myself == "My Profile")) and post.islock == true %}
+                                <form method="POST" action="/unlockpost" class="d-inline-flex col">
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <input type="hidden" name="image" value="{{ post.image }}">
+                                    <input type="hidden" name="description" value="{{ post.description }}">
+                                    <button type="submit" class="btn btn-secondary ms-1"
+                                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                        UnLock
+                                    </button>
+                                </form>
+                            {% endif %}
                         {% endif %}
                     </span>
                     <br><br>
