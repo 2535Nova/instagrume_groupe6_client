@@ -147,7 +147,11 @@ class PageController extends AbstractController
         $session = $request->getSession();
         $token = $session->get('token-session');
 
-        $data = $this->jsonConverter->encodeToJson(['ban' => true, "password" => $_POST["password"], "avatar" => $_POST["avatar"], "username" => $_POST["username"]]);
+        $jsonUser = $this->apiLinker->getData('/myself', $token);
+        $selfuser = json_decode($jsonUser);
+        
+
+        $data = $this->jsonConverter->encodeToJson(['ban' => true, "roles" => $selfuser->roles]);
         $this->apiLinker->putData('/users/' . $_POST["user_id"], $data, $token);
 
         return $this->redirect("/");
@@ -159,7 +163,7 @@ class PageController extends AbstractController
         $session = $request->getSession();
         $token = $session->get('token-session');
 
-        $data = $this->jsonConverter->encodeToJson(['ban' => false, "password" => $_POST["password"], "avatar" => $_POST["avatar"]]);
+        $data = $this->jsonConverter->encodeToJson(['ban' => false, "roles" => $token->roles]);
         $this->apiLinker->putData('/users/' . $_POST["user_id"], $data, $token);
 
         return $this->redirect("/");
@@ -185,10 +189,19 @@ class PageController extends AbstractController
     $jsUser = $this->apiLinker->getData('/users/search?username=' . $selfuser->username, $token);
     $user = json_decode($jsUser);
 
-    $fileContent = file_get_contents($file->getPathname());    
-    $fileMimeType = mime_content_type($file->getPathname());
+    $fileContent = file_get_contents($file->getPathname());
+    
+    // Obtenez l'extension du fichier
+    $fileExtension = $file->getClientOriginalExtension();
+    
+    // Encodez l'extension en base64
+    $base64Extension = base64_encode($fileExtension);
+    
+    // Encodez le contenu du fichier en base64
     $base64FileContent = base64_encode($fileContent);
-    $base64File = 'data:' . $fileMimeType . ';base64,' . $base64FileContent;
+
+    // Concaténez l'extension et le contenu du fichier encodé en base64 avec le type MIME
+    $base64File = 'data:image/' . $fileExtension . ';base64,' . $base64Extension . $base64FileContent;
 
     $data = $this->jsonConverter->encodeToJson([
         'user_id' => $user->id,
@@ -305,13 +318,11 @@ public function modifprofil(Request $request): Response
         $session = $request->getSession();
         $token = $session->get('token-session');
 
-        $user = $this->apiLinker->getData("/users/search?username=" . $username, $token);
-        $user = json_decode($user);
 
         $thispost = $this->apiLinker->getData("/posts/" . $postid, $token);
         $thispost = json_decode($thispost);
 
-        $data = $this->jsonConverter->encodeToJson(['description' => $description, "islock" => $islock, "user_id" => $user->id]);
+        $data = $this->jsonConverter->encodeToJson(['description' => $description, "image" => $thispost->image]);
         $this->apiLinker->putData('/posts/' . $postid, $data, $token);
 
         return $this->redirect("/");
@@ -363,15 +374,34 @@ public function modifprofil(Request $request): Response
     }
 
     #[Route('/lockpost', methods: ['POST'])]
-    public function lockpost(Request $request)
+    public function lockPost(Request $request)
     {
-        $session = $request->getSession();
-        $token = $session->get('token-session');
-
-        $data = $this->jsonConverter->encodeToJson(['islock' => true, "description" => $_POST['description'], "image" => $_POST["image"]]);
-        $this->apiLinker->putData('/posts/' . $_POST["post_id"], $data, $token);
-
-        return $this->redirect("/");
+        try {
+            // Get the session and token
+            $session = $request->getSession();
+            $token = $session->get('token-session');
+    
+            // Validate and sanitize input data
+            $postId = $_POST['post_id'] ?? null;
+            
+    
+            if (empty($postId)) {
+                throw new \InvalidArgumentException('Invalid input data.');
+            }
+    
+            // Encode data to JSON
+            $data = $this->jsonConverter->encodeToJson(['islock' => true]);
+    
+            // Make an API request to update the post
+            $this->apiLinker->putData('/posts/lock/' . $postId, $data, $token);
+    
+            // Redirect to the home page after successful locking
+            return $this->redirect('/');
+        } catch (\Exception $e) {
+            // Handle errors gracefully
+            // You might want to log the error, display a user-friendly message, or redirect to an error page
+            return new Response('Error: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
     }
 
     #[Route('/unlockpost', methods: ['POST'])]
@@ -380,8 +410,8 @@ public function modifprofil(Request $request): Response
         $session = $request->getSession();
         $token = $session->get('token-session');
 
-        $data = $this->jsonConverter->encodeToJson(['islock' => false, "description" => $_POST['description'], "image" => $_POST["image"]]);
-        $this->apiLinker->putData('/posts/' . $_POST["post_id"], $data, $token);
+        $data = $this->jsonConverter->encodeToJson(['islock' => false]);
+        $this->apiLinker->putData('/posts/lock/' . $_POST["post_id"], $data, $token);
 
         return $this->redirect("/");
     }
