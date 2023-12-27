@@ -93,9 +93,6 @@
                     <div id="myModalProfil" class="form-connexion mb-5 w-auto">
                         <h2 class="d-flex justify-content-center">Modification du Profil</h2><br>
                         <form method="POST" action="/modifprofil" enctype="multipart/form-data">
-                            <label class="label-champ">Mot de passe acctuel : </label><br>
-                            <input class="form-control" spellcheck="false" type="password" name="cupassword" placeholder="Mot de passe acctuel" autocomplete="new-password"><br>
-
                             <label class="label-champ">Nouveau mot de passe : </label><br>
                             <input class="form-control" spellcheck="false" type="password" name="password" placeholder="Nouveau mot de passe" autocomplete="new-password"><br>
 
@@ -163,7 +160,7 @@
                                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                 Supprimer</button>
                             {% endif %}
-                            {% if acctualuser is defined and "ROLE_ADMIN" in acctualuser.roles and post.islock == false %}
+                            {% if (acctualuser is defined and acctualuser != null) and "ROLE_ADMIN" in acctualuser.roles and post.islock == false %}
                                 <form method="POST" action="/lockpost" class="d-inline-flex col">
                                     <input type="hidden" name="post_id" value="{{ post.id }}">
                                     <input type="hidden" name="image" value="{{ post.image }}">
@@ -173,7 +170,7 @@
                                         Lock
                                     </button>
                                 </form>
-                            {% elseif acctualuser is defined and "ROLE_ADMIN" in acctualuser.roles and post.islock == true %}
+                            {% elseif (acctualuser is defined and acctualuser != null) and "ROLE_ADMIN" in acctualuser.roles and post.islock == true %}
                                 <form method="POST" action="/unlockpost" class="d-inline-flex col">
                                     <input type="hidden" name="post_id" value="{{ post.id }}">
                                     <input type="hidden" name="image" value="{{ post.image }}">
