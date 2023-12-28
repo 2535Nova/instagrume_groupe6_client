@@ -89,11 +89,10 @@ class PageController extends AbstractController
             $self = $this->apiLinker->getData('/myself', $token);
         }
         $selfuser = json_decode($self);
-
+        $response = $this->apiLinker->getData('/users/search?username=' . $username, $token);
         try {
-            $response = $this->apiLinker->getData('/users/search?username=' . $username, $token);
             if ($response) {
-                $param = json_decode($response);
+                $param= json_decode($response);
                 if ($selfuser && $param->username === $selfuser->username) {
                     return $this->redirect('/myself');
                 }
@@ -105,6 +104,16 @@ class PageController extends AbstractController
             return new Response('Erreur lors de la communication avec l\'API.:' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    #[Route('/getdataid', methods: ['POST'])]
+    public function getDataid(Request $request)
+    {
+        $session = $request->getSession();
+        $token = $session->get('token-session');
+        $response = $this->apiLinker->getData("/users/" . $_POST['contenu'], $token);
+        return new Response($response);
+    }
+
 
     #[Route('/deletepost', methods: ['DELETE'])]
     public function deletePost(Request $request)

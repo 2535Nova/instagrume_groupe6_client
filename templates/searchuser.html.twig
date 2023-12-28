@@ -36,6 +36,37 @@
                 type2.type = "hidden";
             }  
         }
+
+        $(document).ready(function () {
+            var contenuElement= document.getElementById("test");
+            $.ajax({
+                type: "POST",
+                url: "/getdataid",
+                data: { contenu: contenuElement.innerText },
+                success: function (data) {
+                    var jsonData= JSON.parse(data);
+                    contenuElement.innerText= jsonData.username;
+                    contenuElement.href = "http://127.0.0.1:8000/search?username="+jsonData.username;
+                },
+                error: function (error) {
+                    console.log("Erreur AJAX: ", error);
+                }
+            });
+            var contenuElement2= document.getElementById("test2");
+            $.ajax({
+                type: "POST",
+                url: "/getdataid",
+                data: { contenu: contenuElement2.innerText },
+                success: function (data2) {
+                    var jsonData2= JSON.parse(data2);
+                    contenuElement2.innerText= jsonData2.username;
+                    contenuElement2.href = "http://127.0.0.1:8000/search?username="+jsonData2.username;
+                },
+                error: function (error) {
+                    console.log("Erreur AJAX: ", error);
+                }
+            });
+        });
     </script>
 {% endblock %}
 
@@ -196,9 +227,22 @@
                     {% endif %}
                     <br>
                     {% for comment in post.commentaires %}
-                        De: <a href="/search?username={{ comment.user_id.username }}">{{ comment.user_id.username }}</a>
+                        {% if comment.user is defined %}
+                            {% set userId = comment.user.username ?? comment.user %}
+                            {% if userId is defined %}
+                                {# Utiliser userId comme la valeur à afficher dans le lien #}
+                                De: <a id="test" href="/search?{{ comment.user.username is defined ? 'username='~userId : 'user_id='~userId }}">{{ userId }}</a>
+                            {% else %}
+                                {# Afficher des informations de débogage si userId n'est pas défini #}
+                                userId is not defined: {{ dump(comment.user) }}
+                            {% endif %}
+                        {% else %}
+                            {# Afficher des informations si comment.user n'est pas défini #}
+                            comment.user is not defined: {{ dump(comment) }}
+                        {% endif %}
                         {% if myself is defined or acctualuser is defined %}
-                            {% if acctualuser is defined and acctualuser != null and (acctualuser.username == comment.user_id.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}  
+                            {% if actualuser is defined and actualuser != null and (actualuser is iterable and actualuser.username == comment.user_id.username or "ROLE_ADMIN" in actualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}
+
                                 <button type="submit" class="btn btn-primary ms-1" onclick="openModalcomment('{{comment.content}}', {{comment.id}})"
                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                     Modifier
@@ -228,9 +272,21 @@
                         {% endif %}
                         <div class="container">
                             {% for reponse in comment.reponses %}
-                                De: <a href="/search?username={{ reponse.user.username }}">{{ reponse.user.username }}</a>
+                               {% if reponse.user is defined %}
+                                    {% set userId = reponse.user.username ?? reponse.user %}
+                                    {% if userId is defined %}
+                                        {# Utiliser userId comme la valeur à afficher dans le lien #}
+                                        De: <a id="test2" href="/search?{{ reponse.user.username is defined ? 'username='~userId : 'user_id='~userId }}">{{ userId }}</a>
+                                    {% else %}
+                                        {# Afficher des informations de débogage si userId n'est pas défini #}
+                                        userId is not defined: {{ dump(reponse.user) }}
+                                    {% endif %}
+                                {% else %}
+                                    {# Afficher des informations si comment.user n'est pas défini #}
+                                    comment.user is not defined: {{ dump(reponse) }}
+                                {% endif %}                     
                                 {% if myself is defined or (acctualuser is defined and acctualuser != null) %}
-                                    {% if acctualuser is defined and acctualuser != null and (acctualuser.username == reponse.user.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}
+                                    {% if acctualuser is defined and acctualuser != null and (acctualuser is iterable and acctualuser.username == reponse.user.username or "ROLE_ADMIN" in acctualuser.roles) or (myself is defined and "ROLE_ADMIN" in user.roles) %}
                                         <button type="submit" class="btn btn-primary ms-1" onclick="openModalreponse('{{reponse.content}}', {{reponse.id}})"
                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                                             Modifier
@@ -239,7 +295,8 @@
                                         <button type="button" class="btn btn-sm btn-danger ms-1 delete-reponse-btn"
                                             data-reponse-id="{{ reponse.id }}"
                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                                        Supprimer</button>
+                                            Supprimer
+                                        </button>
                                     {% endif %}                                     
                                 {% endif %}
                                 <br>
